@@ -1,2 +1,2 @@
 # ExpoVotingApp
-Web application to tally votes for an project exposition.
+Web application to tally votes for a project exposition.

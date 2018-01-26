@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Voting Results</title> 
+</head>
+<body>
+	<table>
+		<tr>
+			<th>Team Number</th>
+			<th>Votes</th>
+		</tr>
+	    {% for row in votes_table %}
+	        <tr>
+	        	<td>{{row[0]}}</td>
+	        	<td>{{row[1]}}</td>
+	        </tr>
+	    {% endfor %}
+    </table>
+</body>
+</html>

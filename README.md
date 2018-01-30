@@ -5,25 +5,31 @@ A web application that allows expo visitors to vote on their favorite Junior Des
 
 To run the flask app, open the command promt and navigate to the folder that holds the full application. Ensure that you have virtualenv installed on your computer using [these instructions](http://flask.pocoo.org/docs/0.11/installation/#installation).
 
+If you don't have a venv/ folder in the project directory, run the following command:
+
+    $ virtualenv venv
+
 In the command line, enter the following code to activate the virtual environment:
+
+__**Mac/Linux:**__
+
+    $ venv/bin/activate
+   
+__**Windows:**__
 
     $ venv\scripts\activate
 
-If you're using a Mac, you'll need to use the following code:
-
-    $ venv/bin/activate
-
 Now, enter the following code to run the flask app:
 
-__**Windows:**__
-
-    $ set FLASK_APP=main.py
+__**Mac/Linux:**__
+   
+    $ export FLASK_APP=main.py
     $ flask run
         * Running on http://127.0.0.1:5000/
         
-__**Mac/Linux:**__
+__**Windows:**__
 
-    $ export FLASK_APP=main.py
+    $ set FLASK_APP=main.py
     $ flask run
         * Running on http://127.0.0.1:5000/
 

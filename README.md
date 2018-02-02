@@ -21,6 +21,8 @@ __**Windows:**__
 
 Now, enter the following code to run the flask app:
 
+**__change main.py to the file name of the file where the program starts__**
+
 __**Mac/Linux:**__
    
     $ export FLASK_APP=main.py

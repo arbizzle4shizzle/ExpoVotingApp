@@ -4,8 +4,8 @@ app = Flask(__name__)
 
 
 poll_data = {
-   'question' : 'Which web framework do you use?',
-   'fields'   : ['Flask', 'Django', 'TurboGears', 'web2py', 'pylonsproject']
+   'question' : 'Vote on a Project',
+   'fields'   : ['Project 1', 'Project 2', 'Project 3', 'Project 4', 'Project 5']
 }
 
 filename = 'data.txt'

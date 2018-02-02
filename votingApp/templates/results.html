@@ -4,12 +4,11 @@
 <title>{{ data.question }}</title>
 </head>
 <body>
-<h1>Results for</h1>
-{{ data.question }}
+<h1>Results:</h1>
  
 <ul>
 {% for e in votes %}
-  <li>{{ e }} {{ votes[e] }}</li>
+  <li>{{ e }} : {{ votes[e] }}</li>
 {% endfor %}
 </ul>
  

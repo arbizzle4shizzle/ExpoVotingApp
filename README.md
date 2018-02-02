@@ -13,7 +13,7 @@ In the command line, enter the following code to activate the virtual environmen
 
 __**Mac/Linux:**__
 
-    $ venv/bin/activate
+    $ . venv/bin/activate
    
 __**Windows:**__
 

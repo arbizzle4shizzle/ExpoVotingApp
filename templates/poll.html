@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{{ data.question }}</title>
+</head>
+<body>
+<h1>{{ data.question }}</h1>
+<form action="/poll">
+  {% for e in data.fields %}
+     <input type="radio" name="field" value="{{ e }}"> {{ e }}<br>
+  {% endfor %}
+  <input type="submit" value="Vote" />
+</form>
+
+<h1>View results:</h1>
+
+<form action="/results" method="GET">
+        <button type="submit">Results</button>
+    </form>
+</body>
+</html>

@@ -20,12 +20,12 @@ def login():
 def user_auth():
     password = request.form['passField']
     if (password != voterPassword):
-        return redirect(url_for('incorrectLogin'))
-    return redirect(url_for('pollScreen'))
+        return redirect(url_for('incorrectLoginScreen'))
+    return redirect(url_for('pollScreen')) #after logging in, go to pollScreen
 
-@app.route('/incorrectLogin')
-def incorrectLogin():
-    return 'Your Login information was incorrect. Please try again'
+@app.route('/incorrectLoginScreen')
+def incorrectLoginScreen():
+    return render_template('incorrectLogin.html')
 
 @app.route("/welcome", methods=['GET', 'POST'])
 def welcomeScreen():
@@ -43,7 +43,7 @@ def poll():
     out.write( vote + '\n' )
     out.close()
 
-    return render_template('thankyou.html', data = poll_data) 
+    return render_template('thankyou.html', data = poll_data)
 
 @app.route('/results', methods=['GET', 'POST'])
 def voting():

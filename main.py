@@ -27,10 +27,6 @@ def user_auth():
 def incorrectLoginScreen():
     return render_template('incorrectLogin.html')
 
-@app.route("/welcome", methods=['GET', 'POST'])
-def welcomeScreen():
-    return render_template('index.html')
-
 @app.route('/pollScreen')
 def pollScreen():
     return render_template('poll.html', data = poll_data)

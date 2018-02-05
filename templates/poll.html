@@ -5,15 +5,19 @@
 </head>
 <body>
 <h1>{{ data.question }}</h1>
-<form action="/poll">
+<!-- action is redirect url after form is complete (submit button pressed) -->
+<form action="/submitted">
+  <!-- creates radio button for each project -->
   {% for e in data.fields %}
      <input type="radio" name="field" value="{{ e }}"> {{ e }}<br>
   {% endfor %}
+  <!-- submit button -->
   <input type="submit" value="Vote" />
 </form>
 
+<!-- view results button -->
 <h1>View results:</h1>
-
+<!-- redirects to /results when button is pressed -->
 <form action="/results" method="GET">
         <button type="submit">Results</button>
     </form>

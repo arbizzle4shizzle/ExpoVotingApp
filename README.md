@@ -36,3 +36,18 @@ __**Windows:**__
         * Running on http://127.0.0.1:5000/
 
 Now, just head over to [http://127.0.0.1:5000/](http://127.0.0.1:5000/) to view the running application.
+
+## Databases
+
+Database Information
+
+PythonAnywhere Info:
+* arbermuharemi@gmail.com
+* expovoting123
+
+Development Database Info [https://www.freemysqlhosting.net](https://www.freemysqlhosting.net):
+* Server/Host: sql9.freemysqlhosting.net
+* Name: sql9219692
+* Username: sql9219692
+* Password: 5M2YS1HZdZ
+* Port Number: 3306

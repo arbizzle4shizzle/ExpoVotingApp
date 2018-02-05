@@ -45,7 +45,7 @@ PythonAnywhere Info:
 * arbermuharemi@gmail.com
 * expovoting123
 
-Development Database Info [https://www.freemysqlhosting.net](https://www.freemysqlhosting.net):
+Development Database Info (Website: [https://www.freemysqlhosting.net](https://www.freemysqlhosting.net)):
 * Server/Host: sql9.freemysqlhosting.net
 * Name: sql9219692
 * Username: sql9219692

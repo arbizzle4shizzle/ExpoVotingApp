@@ -46,7 +46,7 @@ PythonAnywhere Info:
 * expovoting123
 
 Development Database Info (Management: [https://www.freemysqlhosting.net](https://www.freemysqlhosting.net)):
-* Website: (http://www.phpmyadmin.co/)[http://www.phpmyadmin.co/]
+* Website: [http://www.phpmyadmin.co/](http://www.phpmyadmin.co/)
 * Server/Host: sql9.freemysqlhosting.net
 * Name: sql9219692
 * Username: sql9219692

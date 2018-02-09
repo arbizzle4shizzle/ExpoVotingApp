@@ -1,9 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, g, render_template, request, redirect, session, url_for
+from flaskext.mysql import MySQL
 import os
 
 app = Flask(__name__)
 
 voterPassword = "vote123"
+organizerPassword = "organizer123"
 
 #question is the header for the voting page
 #fields are each of the voting option titles
@@ -13,6 +15,40 @@ poll_data = {
 }
 #filename for mock database
 filename = 'data.txt'
+
+#Information for database connection
+mysql = MySQL()
+app.config['MYSQL_DATABASE_USER'] = 'sql9219692'
+app.config['MYSQL_DATABASE_PASSWORD'] = '5M2YS1HZdZ'
+app.config['MYSQL_DATABASE_DB'] = 'sql9219692'
+app.config['MYSQL_DATABASE_HOST'] = 'sql9.freemysqlhosting.net'
+mysql.init_app(app)
+
+def get_db():
+    """Opens a new database connection if there is none yet for the
+    current application context.
+    """
+    if not hasattr(g, 'mysql_db'):
+        g.mysql_db = mysql.connect()
+
+    return g.mysql_db
+
+def get_cursor():
+    """Gets a cursor we can use to point to results in the database"""
+    if not hasattr(g, 'mysql_db'):
+        g.mysql_db = mysql.connect()
+
+    if not hasattr(g, 'cursor'):
+        g.cursor = g.mysql_db.cursor()
+
+    return g.cursor
+
+@app.teardown_appcontext
+def close_db(error):
+    """Closes the database again at the end of the request."""
+    if hasattr(g, 'mysql_db'):
+        g.mysql_db.close()
+
 
 #Displays Login Page for voters
 @app.route('/', methods = ['GET', 'POST'])
@@ -26,10 +62,40 @@ def user_auth():
     #checks if inputted password is correct
     password = request.form['passField']
     #if password is wrong, redirect user to incorrectLoginScreen
-    if (password != voterPassword):
-        return redirect(url_for('incorrectLoginScreen'))
-    #after logging in, go to pollScreen
-    return redirect(url_for('pollScreen')) 
+    if (password == voterPassword):
+        #after logging in, go to pollScreen
+	    return redirect(url_for('pollScreen'))
+	elif (password == organizerPassword):
+		return redirect(url_for('uploadProjectsScreen'))    
+    return redirect(url_for('incorrectLoginScreen'))
+    
+#Displays project upload page
+@app.route('/uploadProjectsScreen')
+def upload_projects():
+	#renders upload.html
+	#TODO: make upload.html page
+    return render_template('upload.html')
+
+#Logic for converting a a csv file into entries in the database
+@app.route('/submittedProjects')
+def importProjects():
+	# csv file contains column names in first line
+	fileName = 'test.csv'
+	with open (fileName, 'r') as f:
+	    reader = csv.reader(f)
+	    columns = next(reader) 
+	    query = 'insert into MyTable({0}) values ({1})'
+	    query = query.format(','.join(columns), ','.join('?' * len(columns)))
+	    cursor = connection.cursor()
+	    for data in reader:
+	        cursor.execute(query, data)
+	    cursor.commit()	
+
+#TODO: Implement this method
+#Shows projects the person just uploaded (or could take them to the vote screen?)
+@app.route('/showProjects')
+def showProjects():
+	pass
 
 #Displays failed login page
 @app.route('/incorrectLoginScreen')

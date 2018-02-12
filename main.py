@@ -61,41 +61,46 @@ def login():
 def user_auth():
     #checks if inputted password is correct
     password = request.form['passField']
+    get_cursor().execute("SELECT `Role` FROM `User` WHERE `password`=%s", [password])
+    role = get_cursor().fetchone()
+    if role is not None:
+        role = role[0]
     #if password is wrong, redirect user to incorrectLoginScreen
-    if (password == voterPassword):
+    if (role == 'Attendee'):
         #after logging in, go to pollScreen
-	    return redirect(url_for('pollScreen'))
-	elif (password == organizerPassword):
-		return redirect(url_for('uploadProjectsScreen'))    
-    return redirect(url_for('incorrectLoginScreen'))
+        return redirect(url_for('pollScreen'))
+    elif (role == 'Organizer'):
+        return redirect(url_for('uploadProjectsScreen'))
+    else:
+        return redirect(url_for('incorrectLoginScreen'))
     
-#Displays project upload page
-@app.route('/uploadProjectsScreen')
-def upload_projects():
-	#renders upload.html
-	#TODO: make upload.html page
-    return render_template('upload.html')
+# #Displays project upload page
+# @app.route('/uploadProjectsScreen')
+# def upload_projects():
+#     #renders upload.html
+#     #TODO: make upload.html page
+#     return render_template('upload.html')
 
-#Logic for converting a a csv file into entries in the database
-@app.route('/submittedProjects')
-def importProjects():
-	# csv file contains column names in first line
-	fileName = 'test.csv'
-	with open (fileName, 'r') as f:
-	    reader = csv.reader(f)
-	    columns = next(reader) 
-	    query = 'insert into MyTable({0}) values ({1})'
-	    query = query.format(','.join(columns), ','.join('?' * len(columns)))
-	    cursor = connection.cursor()
-	    for data in reader:
-	        cursor.execute(query, data)
-	    cursor.commit()	
+# #Logic for converting a a csv file into entries in the database
+# @app.route('/submittedProjects')
+# def importProjects():
+#     # csv file contains column names in first line
+#     fileName = 'test.csv'
+#     with open (fileName, 'r') as f:
+#         reader = csv.reader(f)
+#         columns = next(reader) 
+#         query = 'insert into MyTable({0}) values ({1})'
+#         query = query.format(','.join(columns), ','.join('?' * len(columns)))
+#         cursor = connection.cursor()
+#         for data in reader:
+#             cursor.execute(query, data)
+#         cursor.commit() 
 
-#TODO: Implement this method
-#Shows projects the person just uploaded (or could take them to the vote screen?)
-@app.route('/showProjects')
-def showProjects():
-	pass
+# #TODO: Implement this method
+# #Shows projects the person just uploaded (or could take them to the vote screen?)
+# @app.route('/showProjects')
+# def showProjects():
+#     pass
 
 #Displays failed login page
 @app.route('/incorrectLoginScreen')

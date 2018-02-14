@@ -1,7 +1,7 @@
 # ExpoVotingApp
 A web application that allows expo visitors to vote on their favorite Junior Design project.
 
-# Installing packages
+## Installing packages
 Be sure you have the proper packages to run the app.  These include flask and flask-mysql
 
  	$pip install flask

@@ -1,6 +1,13 @@
 # ExpoVotingApp
 A web application that allows expo visitors to vote on their favorite Junior Design project.
 
+# Installing packages
+Be sure you have the proper packages to run the app.  These include flask and flask-mysql
+
+ 	$pip install flask
+
+ 	$pip install flask-mysql
+ 	
 ## Running the Flask Application
 
 To run the flask app, open the command promt and navigate to the folder that holds the full application. Ensure that you have virtualenv installed on your computer using [these instructions](http://flask.pocoo.org/docs/0.11/installation/#installation).

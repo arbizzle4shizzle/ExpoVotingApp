@@ -2,9 +2,18 @@
 <html>
 <head>
 <title>{{ data.question }}</title>
+<!-- allows proper scrolling/zoom on mobile device -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- bootstrap: css, jquery, & javascript -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- our stylesheet -->
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css?version=1">
 </head>
-<body>
-<h1>{{ data.question }}</h1>
+<body><center>
+    <img src="../static/images/gt_coc.png"><br><br>
+    <h1>{{ data.question }}</h1>
 <!-- action is redirect url after form is complete (submit button pressed) -->
 <form action="/submitted">
   <!-- creates radio button for each project -->
@@ -12,7 +21,7 @@
      <input type="radio" name="field" value="{{ e }}"> {{ e }}<br>
   {% endfor %}
   <!-- submit button -->
-  <input type="submit" value="Vote" />
+  <br><input type="submit" value="Vote" />
 </form>
 
 <!-- view results button -->
@@ -21,5 +30,6 @@
 <form action="/results" method="GET">
         <button type="submit">Results</button>
     </form>
+</center>
 </body>
 </html>

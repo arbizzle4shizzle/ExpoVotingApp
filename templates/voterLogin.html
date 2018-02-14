@@ -2,14 +2,27 @@
 <html>
 <head>
     <title>Expo Voting App Login</title>
+<!-- bootstrap: css, jquery, & javascript -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- our stylesheet -->
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css?version=1">
 </head>
-<body>
-    <h1>Expo Voting App</h1>
-    <h3>Welcome! Please enter your access code</h3>
+<body><br>
+    <center><img src="../static/images/gt_coc.png"><br><br>
+    <h3>Welcome to the College of Computing Junior Design Exposition!<br><br>
+    Please enter your access code.</h3>
     <form action = "/authenticate" method = "POST" id="login-form">
             <label for="passField">Access Code:</label>
             <input type="password"   id="passField" name = "passField"/>
             <input type = "submit" value = "Submit" class="loginbutton"/>
     </form>
+
+    <br><br>
+    <i><b>Where do I find the access code?</b></i><br>
+    Check the display at the front entrance of the Klaus Atrium or ask a
+    Faculty Member, Staff Member, or Volunteer.
+    </center>
 </body>
 </html>

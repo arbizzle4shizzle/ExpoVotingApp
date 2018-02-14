@@ -70,16 +70,16 @@ def user_auth():
         #after logging in, go to pollScreen
         return redirect(url_for('pollScreen'))
     elif (role == 'Organizer'):
-        return redirect(url_for('uploadProjectsScreen'))
+        return render_template('organizerHome.html')
     else:
         return redirect(url_for('incorrectLoginScreen'))
     
-# #Displays project upload page
-# @app.route('/uploadProjectsScreen')
-# def upload_projects():
-#     #renders upload.html
-#     #TODO: make upload.html page
-#     return render_template('upload.html')
+#Displays project upload page
+@app.route('/uploadProjects', methods = ['GET', 'POST'])
+def upload_projects():
+    #renders upload.html
+    #TODO: make upload.html page
+    return render_template('uploadProjects.html')
 
 # #Logic for converting a a csv file into entries in the database
 # @app.route('/submittedProjects')
@@ -103,19 +103,19 @@ def user_auth():
 #     pass
 
 #Displays failed login page
-@app.route('/incorrectLoginScreen')
+@app.route('/incorrectLoginScreen', methods = ['GET', 'POST'])
 def incorrectLoginScreen():
     #renders incorrectLogin.html
     return render_template('incorrectLogin.html')
 
 #Displays voting options page
-@app.route('/pollScreen')
+@app.route('/pollScreen', methods = ['GET', 'POST'])
 def pollScreen():
     #renders poll.html and passes poll_data to template
     return render_template('poll.html', data = poll_data)
 
 #Display page after voting is complete
-@app.route('/submitted')
+@app.route('/submitted', methods = ['GET', 'POST'])
 def poll():
     vote = request.args.get('field')
 

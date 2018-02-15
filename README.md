@@ -52,7 +52,7 @@ PythonAnywhere Info:
 * arbermuharemi@gmail.com
 * expovoting123
 
-Development Database Info (Management: [https://www.freemysqlhosting.net](https://www.freemysqlhosting.net)):
+Development Database Info:
 * Website: [http://www.phpmyadmin.co/](http://www.phpmyadmin.co/)
 * Server/Host: sql9.freemysqlhosting.net
 * Name: sql9219692

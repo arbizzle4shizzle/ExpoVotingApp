@@ -3,8 +3,14 @@
 {% block title %}Upload Projects{% endblock %}
 
 {% block content %}
-	<h1>This is where uploaded projects will reside.</h1>
-
+    <h1>Upload the project .csv file here!</h1>
+	<form action="/uploader" method="POST" enctype="multipart/form-data">
+		<label class="custom-file">
+		  <input type="file" name="file" class="custom-file-input">
+		  <input type="submit">
+		  <span class="custom-file-control"></span>
+		</label>
+	</form>
 <!-- return to organizer home -->
 <form action="/organizerScreen" method="GET">
     <button type="submit">Return</button>

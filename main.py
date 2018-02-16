@@ -4,8 +4,11 @@ import os
 
 app = Flask(__name__)
 
-voterPassword = "vote123"
-organizerPassword = "organizer123"
+#voterPassword = "vote123"
+#organizerPassword = "organizer123"
+
+#Keeps track of current user's access privilege
+global userRole
 
 #question is the header for the voting page
 #fields are each of the voting option titles
@@ -59,6 +62,7 @@ def login():
 #Checks password and redirects to necessary url
 @app.route('/authenticate', methods = ['GET', 'POST'])
 def user_auth():
+    global userRole
     #checks if inputted password is correct
     password = request.form['passField']
     get_cursor().execute("SELECT `Role` FROM `User` WHERE `password`=%s", [password])
@@ -67,9 +71,11 @@ def user_auth():
         role = role[0]
     #if password is wrong, redirect user to incorrectLoginScreen
     if (role == 'Attendee'):
+        userRole = "Attendee"
         #after logging in, go to pollScreen
         return redirect(url_for('pollScreen'))
     elif (role == 'Organizer'):
+        userRole = "Organizer"
         return render_template('organizerHome.html')
     else:
         return redirect(url_for('incorrectLoginScreen'))
@@ -103,19 +109,19 @@ def upload_projects():
 #     pass
 
 #Displays failed login page
-@app.route('/incorrectLoginScreen', methods = ['GET', 'POST'])
+@app.route('/incorrectLoginScreen', methods=['GET', 'POST'])
 def incorrectLoginScreen():
     #renders incorrectLogin.html
     return render_template('incorrectLogin.html')
 
 #Displays voting options page
-@app.route('/pollScreen', methods = ['GET', 'POST'])
+@app.route('/pollScreen', methods=['GET', 'POST'])
 def pollScreen():
     #renders poll.html and passes poll_data to template
     return render_template('poll.html', data = poll_data)
 
 #Display page after voting is complete
-@app.route('/submitted', methods = ['GET', 'POST'])
+@app.route('/submitted', methods=['GET', 'POST'])
 def poll():
     vote = request.args.get('field')
 
@@ -123,11 +129,15 @@ def poll():
     out.write( vote + '\n' )
     out.close()
 
-    return render_template('thankyou.html', data = poll_data)
+    return render_template('thankyou.html')
 
-#Displays results page
+#Displays results Page
 @app.route('/results', methods=['GET', 'POST'])
 def voting():
+    global userRole
+    #disallow access for regular attendees
+    if (userRole == 'Attendee'):
+        return render_template('invalidAccess.html')
     #initialize votes dict
     votes = {}
     for f in poll_data['fields']:

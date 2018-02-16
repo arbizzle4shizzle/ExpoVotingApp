@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Upload Projects</title>
+<title>Successful Upload!</title>
 <!-- allows proper scrolling/zoom on mobile device -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- bootstrap: css, jquery, & javascript -->
@@ -13,14 +13,23 @@
 </head>
 <body><br>
     <center><img src="../static/images/gt_coc.png"><br><br>
-    <h1>Upload the project .csv file here!</h1>
-	<form action="/uploader" method="POST" enctype="multipart/form-data">
-		<label class="custom-file">
-		  <input type="file" name="file" class="custom-file-input">
-		  <input type="submit">
-		  <span class="custom-file-control"></span>
-		</label>
-	</form>
+    <h1>The following projects were successfully added!</h1>
+<!-- action is redirect url after form is complete (submit button pressed) -->
+<form action="/pollScreen">
+  <!-- creates a line for each uploaded project -->
+    {% for e in data %}
+       <body>{{e}}</body><br>
+    {% endfor %}
+  <!-- submit button to view all projects -->
+  <br><input type="submit" value="See All Projects" />
+</form>
 
-</center></body>
+<!-- view results button -->
+<h1>View results:</h1>
+<!-- redirects to /results when button is pressed -->
+<form action="/results" method="GET">
+        <button type="submit">Results</button>
+    </form>
+</center>
+</body>
 </html>

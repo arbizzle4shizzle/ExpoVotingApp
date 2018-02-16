@@ -1,5 +1,7 @@
 from flask import Flask, g, render_template, request, redirect, session, url_for
 from flaskext.mysql import MySQL
+import io
+import csv
 import os
 
 app = Flask(__name__)
@@ -82,31 +84,37 @@ def user_auth():
     
 #Displays project upload page
 @app.route('/uploadProjects', methods = ['GET', 'POST'])
-def upload_projects():
+def uploadProjects():
     #renders upload.html
-    #TODO: make upload.html page
     return render_template('uploadProjects.html')
 
-# #Logic for converting a a csv file into entries in the database
-# @app.route('/submittedProjects')
-# def importProjects():
-#     # csv file contains column names in first line
-#     fileName = 'test.csv'
-#     with open (fileName, 'r') as f:
-#         reader = csv.reader(f)
-#         columns = next(reader) 
-#         query = 'insert into MyTable({0}) values ({1})'
-#         query = query.format(','.join(columns), ','.join('?' * len(columns)))
-#         cursor = connection.cursor()
-#         for data in reader:
-#             cursor.execute(query, data)
-#         cursor.commit() 
-
-# #TODO: Implement this method
-# #Shows projects the person just uploaded (or could take them to the vote screen?)
-# @app.route('/showProjects')
-# def showProjects():
-#     pass
+#Logic for converting a a csv file into entries in the database
+@app.route('/uploader', methods = ['GET', 'POST'])
+def uploadProjectsToDatabase():
+    # Checks if a post request was made to this url
+    # If so, checks for the uploaded file
+    if request.method == 'POST':
+        # Grabs the uploaded file
+        f = request.files['file']
+        # Creates a stream from the data in the csv
+        stream = io.StringIO(f.stream.read().decode("UTF8"), newline=None)
+        csv_input = csv.reader(stream)
+        # The first row of the csv file is the name of the columns of the database
+        columns = next(csv_input)
+        query = '''INSERT INTO Project({0}) VALUES ({1})'''
+        query = query.format(','.join(columns), ','.join(list(('%s',) * len(columns))))
+        cursor = get_cursor()
+        addedProjects = []
+        for data in csv_input:
+            teamNum = data[0]
+            projName = data[2]
+            try:
+                cursor.execute(query, data)
+                get_db().commit()
+                addedProjects.append("Team " + teamNum + ": " + projName)
+            except:
+                pass
+        return render_template("showUploadedProjects.html", data = addedProjects)
 
 #Displays failed login page
 @app.route('/incorrectLoginScreen', methods=['GET', 'POST'])

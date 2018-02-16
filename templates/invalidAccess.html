@@ -1,21 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Invalid Access</title>
-<!-- allows proper scrolling/zoom on mobile device -->
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- bootstrap: css, jquery, & javascript -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<!-- our stylesheet -->
-    <link rel="stylesheet" type="text/css" href="../static/css/style.css?version=1">
-</head>
-<body><center>
+{% extends "layout.html" %}
+
+{% block title %}Invalid Access{% endblock %}
+
+{% block content %}
 <h1>You don't have permission to view the results.</h1><br>
 <form action="/pollScreen">
         <button type="submit">Return to Voting</button>
     </form>
 
-</center></body>
-</html>
+{% endblock %}

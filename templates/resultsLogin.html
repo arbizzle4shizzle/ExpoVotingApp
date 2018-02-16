@@ -1,20 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Expo Voting App Results Login</title>
-<!-- bootstrap: css, jquery, & javascript -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<!-- our stylesheet -->
-    <link rel="stylesheet" type="text/css" href="../static/css/style.css?version=1">
-</head>
-<body>
+{% extends "layout.html" %}
+
+{% block title %}Results Login{% endblock %}
+
+{% block content %}
     <h1>To view the results please login</h1>
     <form action = "/authenticate" method = "POST" id="login-form">
             <label for="passField">Password:</label>
             <input type="password"   id="passField" name = "passField"/>
             <input type = "submit" value = "Submit" class="loginbutton"/>
     </form>
-</body>
-</html>
+
+{% endblock %}

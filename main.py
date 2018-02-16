@@ -1,5 +1,6 @@
 from flask import Flask, g, render_template, request, redirect, session, url_for
 from flaskext.mysql import MySQL
+import collections
 import io
 import csv
 import os
@@ -16,7 +17,7 @@ global userRole
 #fields are each of the voting option titles
 poll_data = {
    'question' : 'Vote on a Project',
-   'fields'   : ['Project 1', 'Project 2', 'Project 3', 'Project 4', 'Project 5']
+   'projects'   : {} 
 }
 #filename for mock database
 filename = 'data.txt'
@@ -67,7 +68,7 @@ def user_auth():
     global userRole
     #checks if inputted password is correct
     password = request.form['passField']
-    get_cursor().execute("SELECT `Role` FROM `User` WHERE `password`=%s", [password])
+    get_cursor().execute("SELECT `Role` FROM `User` WHERE `Password`=%s", [password])
     role = get_cursor().fetchone()
     if role is not None:
         role = role[0]
@@ -103,14 +104,14 @@ def uploadProjectsToDatabase():
         columns = next(csv_input)
         query = '''INSERT INTO Project({0}) VALUES ({1})'''
         query = query.format(','.join(columns), ','.join(list(('%s',) * len(columns))))
-        cursor = get_cursor()
         addedProjects = []
         for data in csv_input:
             teamNum = data[0]
             projName = data[2]
             try:
-                cursor.execute(query, data)
+                get_cursor().execute(query, data)
                 get_db().commit()
+                get_cursor().close()
                 addedProjects.append("Team " + teamNum + ": " + projName)
             except:
                 pass
@@ -125,19 +126,50 @@ def incorrectLoginScreen():
 #Displays voting options page
 @app.route('/pollScreen', methods=['GET', 'POST'])
 def pollScreen():
-    #renders poll.html and passes poll_data to template
+    # Clear the poll_data projects in case any have been removed during this session
+    poll_data['projects'].clear()
+    # Create a cursor for the database
+    try:
+        # Grab the TeamNum and ProjName from all the projects in the database
+        get_cursor().execute("SELECT `TeamNumber`,`ProjName` FROM `Project`")
+        for (teamNum, projName) in get_cursor():
+            # Checking if the teamNum and projName are present
+            if (teamNum != None and projName != None):
+                # Converting utf-8 teamNum and projName to normal strings
+                # Adding {teamNum : projName} to dictionary
+                poll_data['projects'][str(teamNum)] = str(projName)
+    except:
+        pass
+    '''
+    TODO: Check if there are 0 results returned and show a different html
+    or show a message explaining this on the poll.html page
+    '''
+    # Ordering the projects by team number
+    poll_data['projects'] = collections.OrderedDict(sorted(poll_data['projects'].items()))
+    # renders poll.html and passes poll_data to template
     return render_template('poll.html', data = poll_data)
 
 #Display page after voting is complete
 @app.route('/submitted', methods=['GET', 'POST'])
 def poll():
-    vote = request.args.get('field')
-
-    out = open(filename, 'a')
-    out.write( vote + '\n' )
-    out.close()
-
-    return render_template('thankyou.html')
+    # Getting the team number the person voted for
+    votedTeamNum = request.args.get('field')
+    # Using boolean to check if vote was recorder
+    voteRegistered = False
+    try:
+        # Grabbing NumVotes for selected project
+        get_cursor().execute("SELECT `NumVotes` FROM `Project` WHERE `TeamNumber` = %s", [votedTeamNum])
+        currNumVotes = get_cursor().fetchone()
+        if currNumVotes is not None:
+            currNumVotes = currNumVotes[0]
+        # Adding one vote to the selected project
+        get_cursor().execute("UPDATE `Project` SET `NumVotes` = %s WHERE `TeamNumber` = %s", [currNumVotes + 1, votedTeamNum])
+        get_db().commit()
+        get_cursor().close()
+        voteRegistered = True
+    except:
+        pass
+    return render_template('thankyou.html', data = votedTeamNum, goodVote = voteRegistered)
 
 #Displays results Page
 @app.route('/results', methods=['GET', 'POST'])
@@ -146,15 +178,30 @@ def voting():
     #disallow access for regular attendees
     if (userRole == 'Attendee'):
         return render_template('invalidAccess.html')
-    #initialize votes dict
+    # Clear the poll_data projects in case any have been removed during this session
+    poll_data['projects'].clear()
+    # Creating a dictionary to store team vote data
     votes = {}
-    for f in poll_data['fields']:
-        votes[f] = 0
-    #read votes from mock database
-    f = open(filename, 'r')
-    for line in f:
-        vote = line.rstrip()
-        votes[vote] += 1
+    try:
+        # Grab the TeamNum, ProjName, and NumVotes from all the projects in the database
+        get_cursor().execute("SELECT `TeamNumber`,`ProjName`,`NumVotes` FROM `Project`")
+    except:
+        pass
+    for (teamNum, projName, numVotes) in get_cursor():
+        # Checking if the teamNum, projName, and numVotes are present
+        if (teamNum != None and projName != None and numVotes != None):
+            # Converting utf-8 teamNum and projName to normal strings, and numVotes to int
+            # Adding {teamNum : projName} to projects dictionary
+            poll_data['projects'][str(teamNum)] = str(projName)
+            # Adding {teamNum : numVotes} to votes dictionary
+            votes[str(teamNum)] = numVotes
+    '''
+    TODO: Check if there are 0 results returned and show a different html
+    or show a message explaining this on the results.html page
+    '''
+    # Ordering the projects by number of votes
+    votes = collections.OrderedDict(sorted(votes.items()))
+
     #display results.html pass in project names and number of votes
     return render_template('results.html', data=poll_data, votes=votes)
 

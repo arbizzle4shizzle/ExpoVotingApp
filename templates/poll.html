@@ -1,17 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>{{ data.question }}</title>
-<!-- allows proper scrolling/zoom on mobile device -->
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- bootstrap: css, jquery, & javascript -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<!-- our stylesheet -->
-    <link rel="stylesheet" type="text/css" href="../static/css/style.css?version=1">
-</head>
-<body><center>
+{% extends "layout.html" %}
+
+{% block title %}Vote{% endblock %}
+
+{% block content %}
+
     <img src="../static/images/gt_coc.png"><br><br>
     <h1>{{ data.question }}</h1>
 <!-- action is redirect url after form is complete (submit button pressed) -->
@@ -24,6 +16,6 @@
   <br><input type="submit" value="Vote" />
   <!-- TODO: Add an error message if you hit vote without selecting a project -->
 </form>
-</center>
-</body>
-</html>
+
+
+{% endblock %}

@@ -9,8 +9,8 @@
 <!-- action is redirect url after form is complete (submit button pressed) -->
 <form action="/submitted">
   <!-- creates radio button for each project -->
-  {% for e in data.fields %}
-     <input type="radio" name="field" value="{{ e }}"> {{ e }}<br>
+  {% for teamNum, projName in data.projects.iteritems() %}
+     <input type="radio" name="field" value="{{ teamNum }}"> Team {{ teamNum }}: {{ projName }}<br>
   {% endfor %}
   <!-- submit button -->
   <br><input type="submit" value="Vote" />

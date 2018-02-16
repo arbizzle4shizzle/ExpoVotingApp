@@ -6,8 +6,8 @@
 <h1>Results:</h1>
 
 <ul class="list-group">
-{% for e in votes %}
-  <li class="list-group-item">{{ e }} : {{ votes[e] }}</li>
+{% for teamNum, numVotes in votes.iteritems() %}
+  <li class="list-group-item">Team {{ teamNum }}: {{ data['projects'][teamNum] }} - {{ numVotes }}</li>
 {% endfor %}
 </ul>
 

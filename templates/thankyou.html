@@ -3,7 +3,12 @@
 {% block title %}Thank You{% endblock %}
 
 {% block content %}
-<h1>Thank you for submitting your vote.</h1>
+{% if goodVote %}
+<h1>Thank you for submitting your vote for Team {{ data }}.</h1>
+{% else %}
+<h1>There was an error submitting your vote for Team {{ data }}.</h1><br>
+<h1>Please return to the Projects screen to vote again.</h1>
+{% endif %}
 <br>
 <form action="/pollScreen" method="GET">
     <button type="submit">Return to Projects</button>

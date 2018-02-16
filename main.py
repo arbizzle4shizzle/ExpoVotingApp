@@ -76,10 +76,10 @@ def user_auth():
         return redirect(url_for('pollScreen'))
     elif (role == 'Organizer'):
         userRole = "Organizer"
-        return render_template('organizerHome.html')
+        return redirect(url_for('organizerScreen'))
     else:
         return redirect(url_for('incorrectLoginScreen'))
-    
+
 #Displays project upload page
 @app.route('/uploadProjects', methods = ['GET', 'POST'])
 def upload_projects():
@@ -94,13 +94,13 @@ def upload_projects():
 #     fileName = 'test.csv'
 #     with open (fileName, 'r') as f:
 #         reader = csv.reader(f)
-#         columns = next(reader) 
+#         columns = next(reader)
 #         query = 'insert into MyTable({0}) values ({1})'
 #         query = query.format(','.join(columns), ','.join('?' * len(columns)))
 #         cursor = connection.cursor()
 #         for data in reader:
 #             cursor.execute(query, data)
-#         cursor.commit() 
+#         cursor.commit()
 
 # #TODO: Implement this method
 # #Shows projects the person just uploaded (or could take them to the vote screen?)
@@ -149,6 +149,12 @@ def voting():
         votes[vote] += 1
     #display results.html pass in project names and number of votes
     return render_template('results.html', data=poll_data, votes=votes)
+
+#Displays organizer homepage
+@app.route('/organizerScreen', methods=['GET', 'POST'])
+def organizerScreen():
+    #renders organizerHome.html
+    return render_template('organizerHome.html')
 
 #main method
 if __name__ == '__main__':

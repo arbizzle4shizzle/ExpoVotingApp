@@ -1,18 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Incorrect Login</title>
-    <!-- bootstrap: css, jquery, & javascript -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<!-- our stylesheet -->
-    <link rel="stylesheet" type="text/css" href="../static/css/style.css?version=1">
-</head>
-<body>
-    <h1>Your Login information was incorrect. Please try again.</h1>
+{% extends "layout.html" %}
+
+{% block title %}Incorrect Login{% endblock %}
+
+{% block content %}
+    <h1>Your Login information was incorrect. Please try again.</h1><br>
     <form action="/" method="GET">
             <button type="submit">Back to Login</button>
         </form>
-</body>
-</html>
+
+{% endblock %}

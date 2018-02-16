@@ -1,14 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Invalid Access</title>
-</head>
-<body>
-<h1>You don't have permission to view the results.</h1>
-<h3>Go Back:</h3>
+{% extends "layout.html" %}
+
+{% block title %}Invalid Access{% endblock %}
+
+{% block content %}
+<h1>You don't have permission to view the results.</h1><br>
 <form action="/pollScreen">
-        <button type="submit">Return</button>
+        <button type="submit">Return to Voting</button>
     </form>
 
-</body>
-</html>
+{% endblock %}

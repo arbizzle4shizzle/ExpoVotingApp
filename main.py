@@ -78,10 +78,10 @@ def user_auth():
         return redirect(url_for('pollScreen'))
     elif (role == 'Organizer'):
         userRole = "Organizer"
-        return render_template('organizerHome.html')
+        return redirect(url_for('organizerScreen'))
     else:
         return redirect(url_for('incorrectLoginScreen'))
-    
+
 #Displays project upload page
 @app.route('/uploadProjects', methods = ['GET', 'POST'])
 def uploadProjects():
@@ -157,6 +157,12 @@ def voting():
         votes[vote] += 1
     #display results.html pass in project names and number of votes
     return render_template('results.html', data=poll_data, votes=votes)
+
+#Displays organizer homepage
+@app.route('/organizerScreen', methods=['GET', 'POST'])
+def organizerScreen():
+    #renders organizerHome.html
+    return render_template('organizerHome.html')
 
 #main method
 if __name__ == '__main__':

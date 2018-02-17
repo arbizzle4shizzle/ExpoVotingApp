@@ -1,4 +1,19 @@
 /* style sheet */
 body {
     background-color: #67c7ec;
+    /* background-color: #000000; */
+}
+
+.container {
+      padding: 80px 120px;
+}
+
+td {
+    word-wrap: break-word;
+    padding: 5px;
+}
+
+.voteTable {
+    text-align: left;
+    width: 40%;
 }

@@ -7,12 +7,31 @@
 <!-- action is redirect url after form is complete (submit button pressed) -->
 <form action="/submitted">
   <!-- creates radio button for each project -->
+<div class="voteTable">
   {% for teamNum, projName in data.projects.items() %}
-     <input type="radio" name="field" value="{{ teamNum }}"> Team {{ teamNum }}: {{ projName }}<br>
-  {% endfor %}
+
+<table>
+    <tr align="left">
+        <td><input type="radio" name="field" value="{{ teamNum }}">   </td>
+        <td><b>Team {{ teamNum }}</b>  {{ projName[0] }}</td>
+    </tr>
+    <tr align="left">
+        <td></td>
+        <td>{{ projName[1] }}</td>
+    </tr>
+</table><br>
+{% endfor %}
+
+</div>
+
+
   <!-- submit button -->
   <br><input type="submit" value="Vote" />
   <!-- TODO: Add an error message if you hit vote without selecting a project -->
+  <!-- TODO: Make  difference UI for selecting which project to vote? Like a vote
+button next to each project and alert the user that they have one vote, are they sure
+they want to vote for that project. Then, they don't need to scroll ALL the way down
+to hit vote. -->
 </form>
 
 

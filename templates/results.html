@@ -6,7 +6,7 @@
 <h1>Results:</h1>
 
 <ul class="list-group">
-{% for teamNum, numVotes in votes.items() %}
+{% for teamNum, numVotes in votes %}
   <li class="list-group-item">Team {{ teamNum }}: {{ data['projects'][teamNum] }} - {{ numVotes }}</li>
 {% endfor %}
 </ul>

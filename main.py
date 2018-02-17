@@ -1,6 +1,7 @@
 from flask import Flask, g, render_template, request, redirect, session, url_for
 from flaskext.mysql import MySQL
 import collections
+import operator
 import io
 import csv
 import os
@@ -200,8 +201,8 @@ def voting():
     or show a message explaining this on the results.html page
     '''
     # Ordering the projects by number of votes
-    votes = collections.OrderedDict(sorted(votes.items(), reverse=True))
-
+    votes = sorted(votes.items(), key=operator.itemgetter(1), reverse=True)
+    print(votes)
     #display results.html pass in project names and number of votes
     return render_template('results.html', data=poll_data, votes=votes)
 

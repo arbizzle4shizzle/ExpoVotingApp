@@ -17,7 +17,7 @@ global userRole
 #fields are each of the voting option titles
 poll_data = {
    'question' : 'Vote on a Project',
-   'projects'   : {} 
+   'projects'   : {}
 }
 #filename for mock database
 filename = 'data.txt'
@@ -200,7 +200,7 @@ def voting():
     or show a message explaining this on the results.html page
     '''
     # Ordering the projects by number of votes
-    votes = collections.OrderedDict(sorted(votes.items()))
+    votes = collections.OrderedDict(sorted(votes.items(), reverse=True))
 
     #display results.html pass in project names and number of votes
     return render_template('results.html', data=poll_data, votes=votes)

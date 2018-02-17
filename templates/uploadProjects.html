@@ -4,13 +4,14 @@
 
 {% block content %}
     <h1>Upload the project .csv file here!</h1>
+    <br>
 	<form action="/uploader" method="POST" enctype="multipart/form-data">
 		<label class="custom-file">
-		  <input type="file" name="file" class="custom-file-input">
+		  <input type="file" name="file" class="custom-file-input"><br>
 		  <input type="submit">
 		  <span class="custom-file-control"></span>
 		</label>
-	</form>
+	</form><br>
 <!-- return to organizer home -->
 <form action="/organizerScreen" method="GET">
     <button type="submit">Return</button>

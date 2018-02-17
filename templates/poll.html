@@ -3,13 +3,11 @@
 {% block title %}Vote{% endblock %}
 
 {% block content %}
-
-    <img src="../static/images/gt_coc.png"><br><br>
     <h1>{{ data.question }}</h1>
 <!-- action is redirect url after form is complete (submit button pressed) -->
 <form action="/submitted">
   <!-- creates radio button for each project -->
-  {% for teamNum, projName in data.projects.iteritems() %}
+  {% for teamNum, projName in data.projects.items() %}
      <input type="radio" name="field" value="{{ teamNum }}"> Team {{ teamNum }}: {{ projName }}<br>
   {% endfor %}
   <!-- submit button -->

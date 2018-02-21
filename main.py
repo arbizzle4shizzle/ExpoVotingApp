@@ -11,8 +11,8 @@ app = Flask(__name__)
 #voterPassword = "vote123"
 #organizerPassword = "organizer123"
 
-#Keeps track of current user's access privilege
-global userRole
+#secret key required for keeping track of user sessions
+app.secret_key = 'D8K27qBS8{8*sYVU>3DA530!0469x{'
 
 #question is the header for the voting page
 #fields are each of the voting option titles
@@ -66,20 +66,18 @@ def login():
 #Checks password and redirects to necessary url
 @app.route('/authenticate', methods = ['GET', 'POST'])
 def user_auth():
-    global userRole
     #checks if inputted password is correct
     password = request.form['passField']
     get_cursor().execute("SELECT `Role` FROM `User` WHERE `Password`=%s", [password])
     role = get_cursor().fetchone()
     if role is not None:
         role = role[0]
+        session['username'] = role
     #if password is wrong, redirect user to incorrectLoginScreen
-    if (role == 'Attendee'):
-        userRole = "Attendee"
+    if role == 'Attendee':
         #after logging in, go to pollScreen
         return redirect(url_for('pollScreen'))
-    elif (role == 'Organizer'):
-        userRole = "Organizer"
+    elif role == 'Organizer':
         return redirect(url_for('organizerScreen'))
     else:
         return redirect(url_for('incorrectLoginScreen'))
@@ -175,9 +173,8 @@ def poll():
 #Displays results Page
 @app.route('/results', methods=['GET', 'POST'])
 def voting():
-    global userRole
     #disallow access for regular attendees
-    if (userRole == 'Attendee'):
+    if session['username'] != 'Organizer':
         return render_template('invalidAccess.html')
     # Clear the poll_data projects in case any have been removed during this session
     poll_data['projects'].clear()

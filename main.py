@@ -137,7 +137,7 @@ def pollScreen():
             if (teamNum != None and projName != None):
                 # Converting utf-8 teamNum and projName to normal strings
                 # Adding {teamNum : projName} to dictionary
-                poll_data['projects'][str(teamNum)] = [str(projName), str(descript)]
+                poll_data['projects'][str(teamNum)] = [str(teamNum),str(teamName),str(projName), str(descript)]
     except:
         pass
     '''

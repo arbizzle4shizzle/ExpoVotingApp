@@ -50,28 +50,26 @@ You can also use your own favico or Hackathon logo/header.
     <table id="expoTable">
       <thead>
         <tr>
-          <th class="number">Table</th>
-          <th class="name">Project</th>
-          <th class="prize">Sponsor Prizes</th>
-          <th class="cat">Category</th> <!--You can comment out this column if you don't need it-->
+          <th class="number">Team Number</th>
+          <th class="name">Team Name</th>
+          <th class="prize">Project Name</th>
+          <th class="cat">Description</th> <!--You can comment out this column if you don't need it-->
         </tr>
       </thead>
       <tbody class="list">
-        {% raw %}
-        {{#data}}
+        {% for teamNum,teamInfo in data.projects.items()%}
           <tr>
-            <td class="number">E{{expo}} T{{table}}</td>
-            <td class="name"><a href="{{{link}}}" target="_blank">{{project}}</a></td>
-            <td class="prize">{{sponsors}}</td>
-            <td class="cat">{{category}}</td> <!--You can comment out this column if you don't need it-->
+            <td class="number">{{teamInfo[0]}}</td>
+            <td class="name">{{teamInfo[1]}}</td>
+            <td class="prize">{{teamInfo[2]}}</td>
+            <td class="cat">{{teamInfo[3]}}</td> <!--You can comment out this column if you don't need it-->
             <td>
                 <div class="radio">
                     <label><input type="radio" id='express' name="optradio">Vote</label>
                 </div>
             </td>
           </tr>
-        {{/data}}
-        {% endraw %}
+          {% endfor %}
       </tbody>
     </table>
   </script>

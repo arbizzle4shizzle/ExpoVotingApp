@@ -64,6 +64,11 @@ You can also use your own favico or Hackathon logo/header.
             <td class="name"><a href="{{{link}}}" target="_blank">{{project}}</a></td>
             <td class="prize">{{sponsors}}</td>
             <td class="cat">{{category}}</td> <!--You can comment out this column if you don't need it-->
+            <td>
+                <div class="radio">
+                    <label><input type="radio" id='express' name="optradio">Vote</label>
+                </div>
+            </td>
           </tr>
         {{/data}}
         {% endraw %}
@@ -105,12 +110,12 @@ You can also use your own favico or Hackathon logo/header.
           tableData = results;
 
           // print raw data
-          //console.log(tableData);
-          // add commas to sponsor prize data
-          for (var x in tableData.data) {
-            var s = tableData.data[x]['sponsors'];
-            tableData.data[x]['sponsors'] = s.replace(/,/ig, ", ");
-          }
+          console.log(tableData);
+          // // add commas to sponsor prize data
+          // for (var x in tableData.data) {
+          //   var s = tableData.data[x]['sponsors'];
+          //   tableData.data[x]['sponsors'] = s.replace(/,/ig, ", ");
+          // }
           // print cleaned data
           console.log(tableData);
 

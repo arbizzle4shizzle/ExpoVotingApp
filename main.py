@@ -20,6 +20,7 @@ poll_data = {
    'question' : 'Vote on a Project',
    'projects'   : {}
 }
+
 #filename for mock database
 filename = 'data.txt'
 
@@ -130,8 +131,8 @@ def pollScreen():
     # Create a cursor for the database
     try:
         # Grab the TeamNum and ProjName from all the projects in the database
-        get_cursor().execute("SELECT `TeamNumber`,`ProjName`, `Description` FROM `Project`")
-        for (teamNum, projName, descript) in get_cursor():
+        get_cursor().execute("SELECT `TeamNumber`,`TeamName`,`ProjName`, `Description` FROM `Project`")
+        for (teamNum, teamName, projName, descript) in get_cursor():
             # Checking if the teamNum and projName are present
             if (teamNum != None and projName != None):
                 # Converting utf-8 teamNum and projName to normal strings

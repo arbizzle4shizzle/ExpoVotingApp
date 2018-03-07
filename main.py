@@ -1,3 +1,4 @@
+from __future__ import print_function
 from flask import Flask, g, render_template, request, redirect, session, url_for
 from flaskext.mysql import MySQL
 import collections
@@ -5,6 +6,8 @@ import operator
 import io
 import csv
 import os
+import time
+import sys
 
 app = Flask(__name__)
 
@@ -148,6 +151,21 @@ def pollScreen():
     poll_data['projects'] = collections.OrderedDict(sorted(poll_data['projects'].items()))
     # renders poll.html and passes poll_data to template
     return render_template('poll.html', data = poll_data)
+
+@app.route('/commentSubmitted',methods=['GET','POST'])
+def commentSubmitted():
+    teamNumber = request.args.get('teamNumber')
+    commentText = request.form["comment"]
+    tStamp = time.time()
+    print(teamNumber,file=sys.stderr)
+    print(commentText,file=sys.stderr)
+    # try:
+    get_cursor().execute("INSERT INTO `Comment` (TeamNum,TimeStamp,Text) VALUES (teamNumber,tStamp,commentText)");
+    get_db().commit()
+    get_cursor().close()
+    # except:
+    #     pass
+    return render_template('thankyou.html')    
 
 #Display page after voting is complete
 @app.route('/submitted', methods=['GET', 'POST'])

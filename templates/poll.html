@@ -1,146 +1,58 @@
-<!DOCTYPE html>
 
-<!--
-
-Run a find replace on:
-- DevpostURL -> Your Devpost URL: http://pennappsxii.devpost.com
-- HackathonName -> Your Hackathon Name -> PennApps XII
-
-You can also use your own favico or Hackathon logo/header.
-
--->
-
-<html>
 <head>
-  <meta charset='utf-8'>
-  <title>HackathonName Expo</title>
-
-  <!-- Meta tags to eliminate caching. I don't totally get how these work, so you might not need all of them. cribbed from: http://stackoverflow.com/questions/1341089/using-meta-tags-to-turn-off-caching-in-all-browsers-->
-  <meta http-equiv="cache-control" content="max-age=0">
-  <meta http-equiv="cache-control" content="no-cache">
-  <meta http-equiv="expires" content="0">
-  <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT">
-  <meta http-equiv="pragma" content="no-cache">
-
-  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-  <link href='//fonts.googleapis.com/css?family=Roboto:400,700,900,400italic' rel='stylesheet' type='text/css'>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <link rel='stylesheet' type='text/css' href='../static/css/style.css'>
-  <link rel="shortcut icon" href="http://nealrs.github.io/devpost-follow-button/icon/devpost-128.png">
-  <script type='text/javascript' src='//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js'></script>
-  <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.min.js'></script>
-  <script type='text/javascript' src='static/js/mustache.min.js'></script>
-  <script type='text/javascript' src="../static/js/list.js"></script>
+  <script src="../static/js/search.js"></script>
+  <script src="../static/js/submitComment.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
-
-<body>
-  <div class="container">
-    <div id="header">
-      <h1>
-          <img src="../static/images/gt_coc.png" style="vertical-align:middle; width:180x;">
-        </a>
-      <h1>
-    </div>
-    <div id="fullTable"></div>
-  </div>
-
-  <script id="template" type="x-tmpl-mustache">
-    <div class="search_container">
-      <input class="search" type="search" placeholder="Filter by sponsor prize, project name, category or whatever" id="filter"/>
-    </div>
-    <table id="expoTable">
-      <thead>
-        <tr>
-          <th class="number">Team Number</th>
-          <th class="name">Team Name</th>
-          <th class="prize">Project Name</th>
-          <th class="cat">Description</th> <!--You can comment out this column if you don't need it-->
-        </tr>
-      </thead>
-      <tbody class="list">
-        {% for teamNum,teamInfo in data.projects.items()%}
-          <tr>
-            <td class="number">{{teamInfo[0]}}</td>
-            <td class="name">{{teamInfo[1]}}</td>
-            <td class="prize">{{teamInfo[2]}}</td>
-            <td class="cat">{{teamInfo[3]}}</td> <!--You can comment out this column if you don't need it-->
-            <td>
-                <div class="radio">
-                    <label><input type="radio" id='express' name="optradio">Vote</label>
-                </div>
-            </td>
-          </tr>
-          {% endfor %}
-      </tbody>
-    </table>
-  </script>
-  <br>
-  <div id="footer">
-
-    <p>Sponsors, want analytics about who's using your API, what they're building, and where?</p>
-    <p>Organizers, want your own slick expo / table number app?</p>
-    <p>Email <a href="mailto:hackathons@devpost.com"> hackathons@devpost.com</a></p>
-
-    <a href="http://devpost.com"><img src="http://devpost0.assetspost.com/assets/shared/devpost_logo-646bdf6ac6663230947a952f8d354cad.svg" style="height: 30px;"></a>
-
-  </div>
-
-  <script type="text/javascript">
-
-    var tableData;
-    function getParam(variable){
-      var query = window.location.search.substring(1);
-      var vars = query.split("&");
-      for (var i=0;i<vars.length;i++) {
-        var pair = vars[i].split("=");
-        if(pair[0] == variable){return pair[1];}
-      }
-      return(false);
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-
-      // CSV format: https://gist.githubusercontent.com/nealrs/510b6ab766d97b42f572/raw/92188f386410fe9ebdfdea381562a4ddff4a02b7/test.csv
-
-      Papa.parse("../static/data/data.csv", {
-        download: true,
-        header: true,
-        complete: function(results) {
-          tableData = results;
-
-          // print raw data
-          console.log(tableData);
-          // // add commas to sponsor prize data
-          // for (var x in tableData.data) {
-          //   var s = tableData.data[x]['sponsors'];
-          //   tableData.data[x]['sponsors'] = s.replace(/,/ig, ", ");
-          // }
-          // print cleaned data
-          console.log(tableData);
-
-          // process and render template
-          var template = $('#template').html();
-          Mustache.parse(template);   // optional, speeds up future uses
-          var rendered = Mustache.render(template, tableData);
-          //console.log(rendered);
-          $('#fullTable').html(rendered);
-
-          // list.js search init
-          var listOptions = {
-            valueNames: [ 'number', 'name', 'prize', 'cat' ],
-            page: 1000000
-          };
-          var userList = new List('fullTable', listOptions);
-
-          // grab filter url param and activate filter
-          var filter = decodeURI(getParam("filter"));
-          if (filter != "false"){
-            $("#filter").val(filter);
-            userList.search(filter);
-          };
-        }
-      });
-
-    });
-  </script>
-</body>
-</html>
+<div class="form-group pull-right">
+    <input type="text" class="search form-control" placeholder="What you looking for?">
+</div>
+<form action="/submitted">
+<span class="counter pull-right"></span>
+<table class="table table-hover table-bordered results">
+  <thead>
+    <tr>
+      <th class="col-md-5 col-xs-5">Team Number</th>
+      <th class="col-md-4 col-xs-4">Team Name</th>
+      <th class="col-md-3 col-xs-3">Project Name</th>
+      <th class="col-md-3 col-xs-3">Description</th>
+      <th class="col-md-3 col-xs-3"></th>
+    </tr>
+    <tr class="warning no-result">
+      <td colspan="4"><i class="fa fa-warning"></i> No result</td>
+    </tr>
+  </thead>
+  <tbody>
+    {% for teamNum,teamInfo in data.projects.items() %}
+    <form action="{{ url_for('commentSubmitted', teamNumber=teamNum)}}" id="form{{teamNum}}" method="post">
+      <tr>
+        <td>{{teamInfo[0]}}</td>
+        <td>{{teamInfo[1]}}</td>
+        <td>{{teamInfo[2]}}</td>
+        <td>{{teamInfo[3]}}</td>
+        <td><div class="radio">
+          <label><input type="radio" name="field" value="{{teamNum}}">Vote</label>
+        </div></td>      
+      </tr>
+      <tr>
+        <td>
+          <label for="comment">Comment:</label>
+          <input style="width:700px" name="comment" type='text' placeholder="Send feedback to the teams" form="form{{teamNum}}">
+          <!-- <a href="{{ url_for('commentSubmitted', teamNumber='{{teamNum}}')}}">Send my_value</a> -->
+          <input type="submit" value="Submit Comment" form="form{{teamNum}}">
+        </td>
+        <td></td>
+        <td></td>
+        <td>
+      </tr>
+    </form>
+    {% endfor %}
+  </tbody>
+</table>
+<br><input type="submit" value="Vote" />
+</form>

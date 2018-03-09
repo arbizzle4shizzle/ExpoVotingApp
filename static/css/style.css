@@ -18,6 +18,11 @@ td {
     width: 40%;
 }
 
+.commentTable {
+    text-align: left;
+    width: 40%;
+}
+
 .list-group-item {
     background-color: #afe8ff;
     border-style: solid;

@@ -20,6 +20,10 @@ poll_data = {
    'question' : 'Vote on a Project',
    'projects'   : {}
 }
+comment_data = {
+    'question' : 'Review Comments',
+    'comments' :{}
+}
 #filename for mock database
 filename = 'data.txt'
 
@@ -209,6 +213,45 @@ def organizerScreen():
     #renders organizerHome.html
     return render_template('organizerHome.html')
 
+#Displays results Page
+@app.route('/comments', methods=['GET', 'POST'])
+def viewComments():
+    #disallow access for regular attendees
+    if session['username'] != 'Organizer':
+        return render_template('invalidAccess.html')
+
+    # Clear the poll_data projects in case any have been removed during this session
+    #poll_data['projects'].clear()
+    # Create a cursor for the database
+    try:
+        # Grab the TeamNum and ProjName from all the projects in the database
+        # get_cursor().execute("SELECT `TeamNumber`,`ProjName`, `Description` FROM `Project`")
+        # for (teamNum, projName, descript) in get_cursor():
+        #     # Checking if the teamNum and projName are present
+        #     if (teamNum != None and projName != None):
+        #         # Converting utf-8 teamNum and projName to normal strings
+        #         # Adding {teamNum : projName} to dictionary
+        #         poll_data['projects'][str(teamNum)] = [str(projName), str(descript)]
+
+        # Grab comment data from the database
+        get_cursor().execute("SELECT `TeamNum`, `TimeStamp`, `Text` FROM `Comment`")
+        print(get_cursor())
+        for (teamNum, time, text) in get_cursor():
+            # Checking if the teamNum and projName are present
+            print(str(teamNum))
+            if (teamNum != None):
+                print("in if")
+                comment_data['comments'][str(teamNum)] = [poll_data[str(teamNum)][0], str(time), str(text)]
+    except:
+        pass
+
+    # Ordering the projects by team number
+    comment_data['comments'] = collections.OrderedDict(sorted(comment_data['comments'].items()))
+
+    print(comment_data)
+
+    #display comments.html 
+    return render_template('comments.html', data=comment_data)
 #main method
 if __name__ == '__main__':
     app.run(debug = True)

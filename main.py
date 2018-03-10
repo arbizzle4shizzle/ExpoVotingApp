@@ -15,7 +15,7 @@ app = Flask(__name__)
 #organizerPassword = "organizer123"
 
 #secret key required for keeping track of user sessions
-app.secret_key = 'D8K27qBS8{8*sYVU>3DA530!0469x{'
+app.secret_key = 'D8K27qBS8{8*sYVU>3DA530!0469x}'
 
 #question is the header for the voting page
 #fields are each of the voting option titles
@@ -24,10 +24,6 @@ poll_data = {
    'projects'   : {}
 }
 
-comment_data = {
-    'question' : 'Review Comments',
-    'comments' :{}
-}
 #filename for mock database
 filename = 'data.txt'
 
@@ -264,7 +260,7 @@ def viewComments():
 
     #display comments.html 
     return render_template('comments.html', data=comments)
-    
+
 #main method
 if __name__ == '__main__':
     app.run(debug = True)

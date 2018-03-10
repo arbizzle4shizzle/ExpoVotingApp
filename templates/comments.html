@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}Comments{% endblock %}
+
+{% block content %}
+<h1>Comments:</h1>
+
+<ul class="list-group">
+{% for teamNum in data %}
+	{% for text in data[teamNum] %}
+	  <li class="list-group-item">Team {{ teamNum }}: {{ text }}</li>
+	{% endfor %}
+{% endfor %}
+</ul>
+
+<br><br>
+<!-- return to organizer home -->
+<form action="/organizerScreen" method="GET">
+    <button type="submit">Return</button>
+</form>
+
+
+{% endblock %}

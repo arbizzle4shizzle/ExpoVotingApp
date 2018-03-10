@@ -216,4 +216,15 @@ input {
     border-top: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
   }
+
+.commentTable {
+    text-align: left;
+    width: 40%;
+}
+
+.list-group-item {
+    background-color: #afe8ff;
+    border-style: solid;
+    border-color: #000000;
+
 }

@@ -24,6 +24,10 @@ poll_data = {
    'projects'   : {}
 }
 
+comment_data = {
+    'question' : 'Review Comments',
+    'comments' :{}
+}
 #filename for mock database
 filename = 'data.txt'
 
@@ -228,6 +232,39 @@ def organizerScreen():
     #renders organizerHome.html
     return render_template('organizerHome.html')
 
+#Displays results Page
+@app.route('/comments', methods=['GET', 'POST'])
+def viewComments():
+    #disallow access for regular attendees
+    if session['username'] != 'Organizer':
+        return render_template('invalidAccess.html')
+    try:
+        # Creating a dictionary to store team comment data
+        # comments = {teamNum: [comment1, comment2, ...]}
+        comments = {}
+        # Grab comment data from the database
+        get_cursor().execute("SELECT `TeamNum`, `TimeStamp`,`Text` FROM `Comment`")
+        for (teamNum, timeStamp, text) in get_cursor():
+            # Checking if the teamNum and text are present
+            if (teamNum != None and text != None):
+                # if the team is already in the dict 
+                if teamNum in comments:
+                    # append the comment to the comment list
+                    comments[teamNum].append(text)
+                # if the team is not in the dict
+                else:
+                    # add the team to the dict and create the comment list
+                    comments[teamNum] = [text]
+    except Exception as e:
+        print(e)
+        pass
+
+    # Ordering the comments by team number
+    comments = collections.OrderedDict(sorted(comments.items()))
+
+    #display comments.html 
+    return render_template('comments.html', data=comments)
+    
 #main method
 if __name__ == '__main__':
     app.run(debug = True)

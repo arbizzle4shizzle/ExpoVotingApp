@@ -1,14 +1,15 @@
+{% extends "layout.html" %}
 
-<head>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <link rel='stylesheet' type='text/css' href='../static/css/style.css'>
-  <script src="../static/js/search.js"></script>
-  <script src="../static/js/submitComment.js"></script>
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-</head>
+{% block title %}Poll{% endblock %}
+
+{%block head %}
+<script src="../static/js/search.js"></script>
+<script src="../static/js/submitComment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block content %}
+
 <div class="form-group pull-right">
     <input type="text" class="search form-control" placeholder="What you looking for?">
 </div>
@@ -21,23 +22,20 @@
       <th class="col-md-4 col-xs-4">Team Name</th>
       <th class="col-md-3 col-xs-3">Project Name</th>
       <th class="col-md-3 col-xs-3">Description</th>
-      <th class="col-md-3 col-xs-3"></th>
-    </tr>
-    <tr class="warning no-result">
-      <td colspan="4"><i class="fa fa-warning"></i> No result</td>
+      <th class="col-md-3 col-xs-3">Vote</th>
     </tr>
   </thead>
   <tbody>
     {% for teamNum,teamInfo in data.projects.items() %}
     <form action="{{ url_for('commentSubmitted', teamNumber=teamNum)}}" id="form{{teamNum}}" method="post">
       <tr>
-        <td>{{teamInfo[0]}}</td>
-        <td>{{teamInfo[1]}}</td>
-        <td>{{teamInfo[2]}}</td>
-        <td>{{teamInfo[3]}}</td>
-        <td><div class="radio">
+        <td>{{teamInfo[0]}}</td> <!-- Team Number -->
+        <td>{{teamInfo[1]}}</td> <!-- Team Name -->
+        <td>{{teamInfo[2]}}</td> <!-- Project Name -->
+        <td>{{teamInfo[3]}}</td> <!-- Description -->
+        <td class="col-md-5 col-xs-5"><div class="radio">
           <label><input type="radio" name="field" value="{{teamNum}}">Vote</label>
-        </div></td>      
+        </div></td>
       </tr>
       <tr>
         <td>
@@ -46,9 +44,9 @@
           <!-- <a href="{{ url_for('commentSubmitted', teamNumber='{{teamNum}}')}}">Send my_value</a> -->
           <input type="submit" value="Submit Comment" form="form{{teamNum}}">
         </td>
+        <!-- <td></td>
         <td></td>
-        <td></td>
-        <td>
+        <td> -->
       </tr>
     </form>
     {% endfor %}
@@ -56,3 +54,4 @@
 </table>
 <br><input type="submit" value="Vote" />
 </form>
+{% endblock %}

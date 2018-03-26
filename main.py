@@ -156,11 +156,10 @@ def pollScreen():
 def commentSubmitted():
     teamNumber = request.args.get('teamNumber')
     commentText = request.form["comment"]
-    tStamp = time.time()
-    print(teamNumber,file=sys.stderr)
-    print(commentText,file=sys.stderr)
+    # print(teamNumber,file=sys.stderr)
+    # print(commentText,file=sys.stderr)
     # try:
-    get_cursor().execute("INSERT INTO `Comment` (TeamNum,TimeStamp,Text) VALUES (teamNumber,tStamp,commentText)");
+    get_cursor().execute("INSERT INTO `Comment` (TeamNum,Text) VALUES (%s,%s)", [teamNumber,commentText]);
     get_db().commit()
     get_cursor().close()
     # except:

@@ -1,9 +1,16 @@
 {% extends "layout.html" %}
 
-{% block title %}Poll{% endblock %}
-
-{%block head %}
+{% block head %}
+<!-- need to copy and paste the layout.html header because we add in other elements -->
+<title>Vote</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- bootstrap: css, jquery, & javascript -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- our stylesheet -->
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css?version=1">
+
 <script src="../static/js/search.js"></script>
 <script src="../static/js/submitComment.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

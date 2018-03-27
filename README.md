@@ -2,11 +2,13 @@
 A web application that allows expo visitors to vote on their favorite Junior Design project.
 
 ## Installing packages
-Be sure you have the proper packages to run the app.  These include flask and flask-mysql
+Be sure you have the proper packages to run the app.  These include flask, flask-mysql, and Flask-Mail
 
  	$pip install flask
 
  	$pip install flask-mysql
+
+ 	$pip install Flask-Mail
  	
 ## Running the Flask Application
 

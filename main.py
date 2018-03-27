@@ -9,8 +9,11 @@ import os
 import time
 import sys
 import datetime
+from flask_mail import Mail
+from flask_mail import Message
 
 app = Flask(__name__)
+mail = Mail(app)
 
 #voterPassword = "vote123"
 #organizerPassword = "organizer123"
@@ -275,6 +278,46 @@ def deleteComments():
         get_db().commit()
 
     return render_template('deleteComments.html')
+
+#Displays sent comments Page
+@app.route('/sendComments', methods=['GET', 'POST'])
+def sendComments():
+    #disallow access for regular attendees
+    if session['username'] != 'Organizer':
+        return render_template('invalidAccess.html')
+    try:
+        # Creating a dictionary to store team comment data
+        # comments = {teamNum: [[comment1, timestamp1], [comment2, timestamp2], ...]}
+        comments = {}
+        # Grab comment data from the database
+        get_cursor().execute("SELECT `TeamNum`, `TimeStamp`,`Text` FROM `Comment`")
+        for (teamNum, timeStamp, text) in get_cursor():
+            # Checking if the teamNum and text are present
+            if (teamNum != None and text != None and timeStamp != None):
+                # if the team is already in the dict 
+                if teamNum in comments:
+                    # append the comment to the comment list
+                    comments[teamNum].append(text)
+                # if the team is not in the dict
+                else:
+                    # add the team to the dict and create the comment list
+                    comments[teamNum] = [text]
+        projects = {}
+        get_cursor().execute("SELECT `TeamNumber`,`ProfEmail`,`Email1`,`Email2`,`Email3`,`Email4`,`Email5` FROM `Project`")
+        for (teamNum, profE, E1, E2, E3, E4, E5) in get_cursor():
+            projects[teamNum] = [profE, E1, E2, E3, E4, E5]
+        for team in comments.keys():
+            for comment in comments[team]:
+                msg = Message("Below is a comment on your project:\n" + comment,
+                                sender=projects[team][0],
+                                recipients=[projects[team][1], projects[team][2], projects[team][3], projects[team][4], projects[team][5]])
+                print(msg)
+                mail.send(msg)
+    except Exception as e:
+        print(e)
+        pass
+
+    return render_template('sendComments.html')
 
 #main method
 if __name__ == '__main__':

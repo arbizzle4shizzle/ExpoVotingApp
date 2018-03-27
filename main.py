@@ -8,6 +8,7 @@ import csv
 import os
 import time
 import sys
+import datetime
 
 app = Flask(__name__)
 
@@ -228,7 +229,7 @@ def organizerScreen():
     #renders organizerHome.html
     return render_template('organizerHome.html')
 
-#Displays results Page
+#Displays comments Page
 @app.route('/comments', methods=['GET', 'POST'])
 def viewComments():
     #disallow access for regular attendees
@@ -236,30 +237,44 @@ def viewComments():
         return render_template('invalidAccess.html')
     try:
         # Creating a dictionary to store team comment data
-        # comments = {teamNum: [comment1, comment2, ...]}
+        # comments = {teamNum: [[comment1, timestamp1], [comment2, timestamp2], ...]}
         comments = {}
         # Grab comment data from the database
         get_cursor().execute("SELECT `TeamNum`, `TimeStamp`,`Text` FROM `Comment`")
         for (teamNum, timeStamp, text) in get_cursor():
             # Checking if the teamNum and text are present
-            if (teamNum != None and text != None):
+            if (teamNum != None and text != None and timeStamp != None):
                 # if the team is already in the dict 
                 if teamNum in comments:
                     # append the comment to the comment list
-                    comments[teamNum].append(text)
+                    comments[teamNum].append([text, timeStamp])
                 # if the team is not in the dict
                 else:
                     # add the team to the dict and create the comment list
-                    comments[teamNum] = [text]
+                    comments[teamNum] = [[text, timeStamp]]
     except Exception as e:
         print(e)
         pass
-
+    
     # Ordering the comments by team number
     comments = collections.OrderedDict(sorted(comments.items()))
 
     #display comments.html 
     return render_template('comments.html', data=comments)
+
+#Displays delete Page
+@app.route('/deleteComments', methods=['GET', 'POST'])
+def deleteComments():
+    # Getting the comments that were checked
+    deletedComments = request.args.getlist('delete')
+
+    deletedComments = map(str, deletedComments)
+
+    for t in deletedComments:
+        get_cursor().execute("DELETE FROM `Comment` WHERE `TimeStamp` = " + "'" + t + "'")
+        get_db().commit()
+
+    return render_template('deleteComments.html')
 
 #main method
 if __name__ == '__main__':

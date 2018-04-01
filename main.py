@@ -1,3 +1,4 @@
+from __future__ import print_function
 from flask import Flask, g, render_template, request, redirect, session, url_for
 from flaskext.mysql import MySQL
 import collections
@@ -5,14 +6,20 @@ import operator
 import io
 import csv
 import os
+import time
+import sys
+import datetime
+from flask_mail import Mail
+from flask_mail import Message
 
 app = Flask(__name__)
+mail = Mail(app)
 
 #voterPassword = "vote123"
 #organizerPassword = "organizer123"
 
 #secret key required for keeping track of user sessions
-app.secret_key = 'D8K27qBS8{8*sYVU>3DA530!0469x{'
+app.secret_key = 'D8K27qBS8{8*sYVU>3DA530!0469x}'
 
 #question is the header for the voting page
 #fields are each of the voting option titles
@@ -20,6 +27,7 @@ poll_data = {
    'question' : 'Vote on a Project',
    'projects'   : {}
 }
+
 #filename for mock database
 filename = 'data.txt'
 
@@ -130,13 +138,13 @@ def pollScreen():
     # Create a cursor for the database
     try:
         # Grab the TeamNum and ProjName from all the projects in the database
-        get_cursor().execute("SELECT `TeamNumber`,`ProjName`, `Description` FROM `Project`")
-        for (teamNum, projName, descript) in get_cursor():
+        get_cursor().execute("SELECT `TeamNumber`,`TeamName`,`ProjName`, `Description` FROM `Project`")
+        for (teamNum, teamName, projName, descript) in get_cursor():
             # Checking if the teamNum and projName are present
             if (teamNum != None and projName != None):
                 # Converting utf-8 teamNum and projName to normal strings
                 # Adding {teamNum : projName} to dictionary
-                poll_data['projects'][str(teamNum)] = [str(projName), str(descript)]
+                poll_data['projects'][str(teamNum)] = [str(teamNum),str(teamName),str(projName), str(descript)]
     except:
         pass
     '''
@@ -147,6 +155,21 @@ def pollScreen():
     poll_data['projects'] = collections.OrderedDict(sorted(poll_data['projects'].items()))
     # renders poll.html and passes poll_data to template
     return render_template('poll.html', data = poll_data)
+
+@app.route('/commentSubmitted',methods=['GET','POST'])
+def commentSubmitted():
+    teamNumber = request.args.get('teamNumber')
+    commentText = request.form["comment"]
+    tStamp = time.time()
+    print(teamNumber,file=sys.stderr)
+    print(commentText,file=sys.stderr)
+    # try:
+    get_cursor().execute("INSERT INTO `Comment` (TeamNum,TimeStamp,Text) VALUES (teamNumber,tStamp,commentText)");
+    get_db().commit()
+    get_cursor().close()
+    # except:
+    #     pass
+    return render_template('thankyou.html')    
 
 #Display page after voting is complete
 @app.route('/submitted', methods=['GET', 'POST'])
@@ -208,6 +231,93 @@ def voting():
 def organizerScreen():
     #renders organizerHome.html
     return render_template('organizerHome.html')
+
+#Displays comments Page
+@app.route('/comments', methods=['GET', 'POST'])
+def viewComments():
+    #disallow access for regular attendees
+    if session['username'] != 'Organizer':
+        return render_template('invalidAccess.html')
+    try:
+        # Creating a dictionary to store team comment data
+        # comments = {teamNum: [[comment1, timestamp1], [comment2, timestamp2], ...]}
+        comments = {}
+        # Grab comment data from the database
+        get_cursor().execute("SELECT `TeamNum`, `TimeStamp`,`Text` FROM `Comment`")
+        for (teamNum, timeStamp, text) in get_cursor():
+            # Checking if the teamNum and text are present
+            if (teamNum != None and text != None and timeStamp != None):
+                # if the team is already in the dict 
+                if teamNum in comments:
+                    # append the comment to the comment list
+                    comments[teamNum].append([text, timeStamp])
+                # if the team is not in the dict
+                else:
+                    # add the team to the dict and create the comment list
+                    comments[teamNum] = [[text, timeStamp]]
+    except Exception as e:
+        print(e)
+        pass
+    
+    # Ordering the comments by team number
+    comments = collections.OrderedDict(sorted(comments.items()))
+
+    #display comments.html 
+    return render_template('comments.html', data=comments)
+
+#Displays delete Page
+@app.route('/deleteComments', methods=['GET', 'POST'])
+def deleteComments():
+    # Getting the comments that were checked
+    deletedComments = request.args.getlist('delete')
+
+    deletedComments = map(str, deletedComments)
+
+    for t in deletedComments:
+        get_cursor().execute("DELETE FROM `Comment` WHERE `TimeStamp` = " + "'" + t + "'")
+        get_db().commit()
+
+    return render_template('deleteComments.html')
+
+#Displays sent comments Page
+@app.route('/sendComments', methods=['GET', 'POST'])
+def sendComments():
+    #disallow access for regular attendees
+    if session['username'] != 'Organizer':
+        return render_template('invalidAccess.html')
+    try:
+        # Creating a dictionary to store team comment data
+        # comments = {teamNum: [[comment1, timestamp1], [comment2, timestamp2], ...]}
+        comments = {}
+        # Grab comment data from the database
+        get_cursor().execute("SELECT `TeamNum`, `TimeStamp`,`Text` FROM `Comment`")
+        for (teamNum, timeStamp, text) in get_cursor():
+            # Checking if the teamNum and text are present
+            if (teamNum != None and text != None and timeStamp != None):
+                # if the team is already in the dict 
+                if teamNum in comments:
+                    # append the comment to the comment list
+                    comments[teamNum].append(text)
+                # if the team is not in the dict
+                else:
+                    # add the team to the dict and create the comment list
+                    comments[teamNum] = [text]
+        projects = {}
+        get_cursor().execute("SELECT `TeamNumber`,`ProfEmail`,`Email1`,`Email2`,`Email3`,`Email4`,`Email5` FROM `Project`")
+        for (teamNum, profE, E1, E2, E3, E4, E5) in get_cursor():
+            projects[teamNum] = [profE, E1, E2, E3, E4, E5]
+        for team in comments.keys():
+            for comment in comments[team]:
+                msg = Message("Below is a comment on your project:\n" + comment,
+                                sender=projects[team][0],
+                                recipients=[projects[team][1], projects[team][2], projects[team][3], projects[team][4], projects[team][5]])
+                print(msg)
+                mail.send(msg)
+    except Exception as e:
+        print(e)
+        pass
+
+    return render_template('sendComments.html')
 
 #main method
 if __name__ == '__main__':

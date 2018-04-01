@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}Comments{% endblock %}
+
+{% block content %}
+<h1>Comments:</h1>
+<form action="/deleteComments">
+    <ul class="list-group">
+    {% for teamNum in data %}
+    	{% for val in data[teamNum] %}
+          <div>
+            <li class="list-group-item"><input type="checkbox" name="delete" value="{{ val[1] }}"> Team {{ teamNum }}: {{ val[0] }}</li>
+          </div>
+    	{% endfor %}
+    {% endfor %}
+    </ul>
+<button type="submit">Delete</button>
+<button type="submit" formaction="/sendComments">Send Comments</button>
+</form>
+
+<br><br>
+<!-- return to organizer home -->
+<form action="/organizerScreen" method="GET">
+    <button type="submit">Return</button>
+</form>
+<!-- delete checked comments -->
+<!-- <form action="/deleteComments" method="GET">
+    <button type="submit">Delete</button>
+</form> -->
+
+{% endblock %}

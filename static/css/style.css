@@ -12,6 +12,7 @@ table {
   border-spacing: 0; width: 90%;
   /* background-color: #FFF; */
   border-collapse: collapse;
+  border-color: #ffffff;
 }
 
 /* tbody tr:nth-child(odd) {
@@ -87,13 +88,13 @@ body {
 
 
 img {width: 100%;}
-hr {border: 2px solid #CCF4FF;}
+hr {border: 2px solid #CCF4FF;} /* turquoise-ish */
 
 p a, a {
   color: #062946;
   text-decoration: none;
   padding-bottom: 0px;
-  border-bottom: 2px #CCCCCC dotted;
+  /* border-bottom: 2px #CCCCCC dotted; */
 }
 a:hover {color: #36648B;}
 a:active {color: #36648B;}
@@ -112,7 +113,7 @@ body.index table {border: 4px solid #CCF4FF; padding: 18px;}
 /* filter css */
 
 input {
-  border: 1px solid #ccc;
+  border: 1px solid #000000;
   margin: 16px 0px;
   width: 90%;
   font-size: 16px;
@@ -210,8 +211,8 @@ input {
 
   tbody tr{
     /* background-color: #fff !important; */
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #000000;
+    border-bottom: 1px solid #000000;
   }
 
 .commentTable {
@@ -223,5 +224,4 @@ input {
     background-color: #bcd1f2; #blue
     border-style: solid;
     border-color: #000000;
-
 }

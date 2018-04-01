@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %}Thank You{% endblock %}
+
+{% block content %}
+
+<h1>You have successfully deleted comments.</h1>
+
+<br>
+<!-- return to organizer home -->
+<form action="/organizerScreen" method="GET">
+    <button type="submit">Return</button>
+</form>
+
+
+{% endblock %}

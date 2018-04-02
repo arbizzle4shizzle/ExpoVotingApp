@@ -9,11 +9,12 @@ import os
 import time
 import sys
 import datetime
-from flask_mail import Mail
-from flask_mail import Message
+from flask_mail import Mail, Message
+import smtplib
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEText import MIMEText
 
 app = Flask(__name__)
-mail = Mail(app)
 
 #voterPassword = "vote123"
 #organizerPassword = "organizer123"
@@ -160,16 +161,16 @@ def pollScreen():
 def commentSubmitted():
     teamNumber = request.args.get('teamNumber')
     commentText = request.form["comment"]
-    tStamp = time.time()
+    # tStamp = time.time()
     print(teamNumber,file=sys.stderr)
     print(commentText,file=sys.stderr)
     # try:
-    get_cursor().execute("INSERT INTO `Comment` (TeamNum,TimeStamp,Text) VALUES (teamNumber,tStamp,commentText)");
+    get_cursor().execute("INSERT INTO `Comment` (`TeamNum`,`Text`) VALUES (%s,%s)", [teamNumber, commentText]);
     get_db().commit()
     get_cursor().close()
     # except:
     #     pass
-    return render_template('thankyou.html')    
+    return render_template('thankYouComment.html', data = teamNumber)    
 
 #Display page after voting is complete
 @app.route('/submitted', methods=['GET', 'POST'])
@@ -306,13 +307,28 @@ def sendComments():
         get_cursor().execute("SELECT `TeamNumber`,`ProfEmail`,`Email1`,`Email2`,`Email3`,`Email4`,`Email5` FROM `Project`")
         for (teamNum, profE, E1, E2, E3, E4, E5) in get_cursor():
             projects[teamNum] = [profE, E1, E2, E3, E4, E5]
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login("expovotingappgt@gmail.com", "juniordesign2")
+        fromaddr = "expovotingappgt@gmail.com"
+        toaddr = "arbermuharemi@gmail.com"
         for team in comments.keys():
             for comment in comments[team]:
-                msg = Message("Below is a comment on your project:\n" + comment,
-                                sender=projects[team][0],
-                                recipients=[projects[team][1], projects[team][2], projects[team][3], projects[team][4], projects[team][5]])
-                print(msg)
-                mail.send(msg)
+                # msg = Message("Below is a comment on your project:\n" + comment,
+                #     sender=projects[team][0],
+                #     recipients=[projects[team][1], projects[team][2], projects[team][3], projects[team][4], projects[team][5]])
+                # print(msg)
+                # mail.send(msg)
+                msg = MIMEMultipart()
+                msg['From'] = fromaddr
+                msg['To'] = toaddr
+                msg['Subject'] = "Feedback from the Junior Design Expo!"
+                body = "Below is a comment an expo visitor left your project:\n" + comment
+                msg.attach(MIMEText(body, 'plain'))
+                text = msg.as_string()
+                server.sendmail(fromaddr, toaddr, text)
+                server.sendmail("expovotingappgt@gmail.com", "arbermuharemi@gmail.com", msg);
+        server.quit()
     except Exception as e:
         print(e)
         pass

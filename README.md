@@ -1,7 +1,7 @@
 # ExpoVotingApp
 A web application that allows expo visitors to vote on their favorite Junior Design project.
 
-## Running the Flask Application
+# Running the Flask Application
 
 To run the flask app, open the command promt and navigate to the folder that holds the full application. Ensure that you have virtualenv installed on your computer using [these instructions](http://flask.pocoo.org/docs/0.11/installation/#installation).
 
@@ -9,7 +9,7 @@ If you don't have a venv/ folder in the project directory, run the following com
 
     $ virtualenv venv
 
-# Installing packages
+## Installing packages
 Be sure you have the proper packages on the virutal environment to run the app.  These include flask, flask-mysql, and Flask-Mail
 
  	$pip install flask
@@ -18,7 +18,7 @@ Be sure you have the proper packages on the virutal environment to run the app. 
 
  	$pip install Flask-Mail
  	
-# Testing/Development (Local)
+## Testing/Development (Local)
 In the command line, enter the following lines to activate the virtual environment and run the flask app:
 
 **__change main.py to the file name of the file where the program starts__**
@@ -39,7 +39,7 @@ __**Windows:**__
 
 Now, just head over to [http://127.0.0.1:5000/](http://127.0.0.1:5000/) to view the locally running application.
 
-# Running the Site (Public)
+## Running the Site (Public)
 Connect to the __jrdesign.cc.gatech.edu__ desktop via Windows Remote Connection
 
 In the command line, enter the following lines to activate the virtual environment and run the flask app:

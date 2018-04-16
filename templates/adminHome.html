@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}Admin Home{% endblock %}
+
+{% block content %}
+    <h1>Welcome to the Admin Homepage!</h1>
+
+    <h3> Change attendee password:</h3>
+
+    <form action = "/changeAttendeePass" method = "POST" id="login-form">
+            <label for="passField">Old Password:</label>
+            <input type="password"   id="oldAttendeePass" name = "oldAttendeePass"/>
+            <label for="passField">New Password:</label>
+            <input type="password"   id="newAttendeePass" name = "newAttendeePass"/>
+            <label for="passField">Confirm New Password:</label>
+            <input type="password"   id="newAttendeePassConfirm" name = "newAttendeePassConfirm"/>
+            <input type = "submit" value = "Submit" class="loginbutton"/>
+    </form>
+
+    <h3> Change organizer password:</h3>
+
+    <form action = "/changeOrganizerPass" method = "POST" id="login-form">
+            <label for="passField">Old Password:</label>
+            <input type="password"   id="oldOrganizerPass" name = "oldOrganizerPass"/>
+            <label for="passField">New Password:</label>
+            <input type="password"   id="newOrganizerPass" name = "newOrganizerPass"/>
+            <label for="passField">Confirm New Password:</label>
+            <input type="password"   id="newOrganizerPassConfirm" name = "newOrganizerPassConfirm"/>
+            <input type = "submit" value = "Submit" class="loginbutton"/>
+    </form>
+
+    
+
+
+{% endblock %}

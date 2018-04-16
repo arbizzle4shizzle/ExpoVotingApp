@@ -88,6 +88,8 @@ def user_auth():
         return redirect(url_for('pollScreen'))
     elif role == 'Organizer':
         return redirect(url_for('organizerScreen'))
+    elif role == 'Admin':
+        return redirect(url_for('adminScreen'))
     else:
         return redirect(url_for('incorrectLoginScreen'))
 
@@ -334,6 +336,76 @@ def sendComments():
         pass
 
     return render_template('sendComments.html')
+
+#Displays admin homepage
+@app.route('/adminScreen', methods=['GET', 'POST'])
+def adminScreen():
+    #renders adminHome.html
+    return render_template('adminHome.html')
+
+#Checks password and redirects to necessary url
+@app.route('/changeAttendeePass', methods = ['GET', 'POST'])
+def changeAttendeePass():
+    #checks if inputted password is correct
+    password = request.form['oldAttendeePass']
+    get_cursor().execute("SELECT `Role` FROM `User` WHERE `Password`=%s", [password])
+    role = get_cursor().fetchone()
+    if role is not None:
+        role = role[0]
+    #if password is wrong, redirect user to notValidPassScreen
+    if role == 'Attendee':
+        #after logging in, go to pollScreen
+        newPass = request.form['newAttendeePass']
+        confirmNewPass = request.form['newAttendeePassConfirm']
+        if (newPass == confirmNewPass):
+            get_cursor().execute("UPDATE `User` SET `Password` = %s WHERE `Role` = 'Attendee' ", [newPass])
+            get_db().commit()
+            #get_cursor().close()
+            return redirect(url_for('changedAttendeePass'))
+        else:
+            return redirect(url_for('passwordsDontMatch'))
+    else:
+        return redirect(url_for('notValidPass'))
+
+#Checks password and redirects to necessary url
+@app.route('/changeOrganizerPass', methods = ['GET', 'POST'])
+def changeOrganizerPass():
+    #checks if inputted password is correct
+    password = request.form['oldOrganizerPass']
+    get_cursor().execute("SELECT `Role` FROM `User` WHERE `Password`=%s", [password])
+    role = get_cursor().fetchone()
+    if role is not None:
+        role = role[0]
+    #if password is wrong, redirect user to notValidPassScreen
+    if role == 'Organizer':
+        #after logging in, go to pollScreen
+        newPass = request.form['newOrganizerPass']
+        confirmNewPass = request.form['newOrganizerPassConfirm']
+        if (newPass == confirmNewPass):
+            get_cursor().execute("UPDATE `User` SET `Password` = %s WHERE `Role` = 'Organizer' ", [newPass])
+            get_db().commit()
+            #get_cursor().close()
+            return redirect(url_for('changedOrganizerPass'))
+        else:
+            return redirect(url_for('passwordsDontMatch'))
+    else:
+        return redirect(url_for('notValidPass'))
+
+@app.route('/changedAttendeePass', methods = ['GET', 'POST'])
+def changedAttendeePass():
+    return render_template("changedAttendeePassScreen.html")
+
+@app.route('/changedOrganizerPass', methods = ['GET', 'POST'])
+def changedOrganizerPass():
+    return render_template("changedOrganizerPassScreen.html")
+
+@app.route('/notValidPass', methods = ['GET', 'POST'])
+def notValidPass():
+    return render_template("notValidPassScreen.html")
+
+@app.route('/passwordsDontMatch', methods = ['GET', 'POST'])
+def passwordsDontMatch():
+    return render_template("passwordsDontMatch.html")
 
 #main method
 if __name__ == '__main__':

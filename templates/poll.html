@@ -12,7 +12,6 @@
 <div class="form-group pull-right">
     <input type="text" class="search form-control" placeholder="What you looking for?">
 </div>
-<form action="/submitted">
 <span class="counter pull-right"></span>
 <table class="table table-hover table-bordered results">
   <thead>
@@ -29,30 +28,28 @@
   </thead>
   <tbody>
     {% for teamNum,teamInfo in data.projects.items() %}
-    <form action="{{ url_for('commentSubmitted', teamNumber=teamNum)}}" id="form{{teamNum}}" method="post">
+
       <tr>
         <td>{{teamInfo[0]}}</td>
         <td>{{teamInfo[1]}}</td>
         <td>{{teamInfo[2]}}</td>
         <td>{{teamInfo[3]}}</td>
-        <td><div class="radio">
+<!--         <td><div class="radio">
           <label><input type="radio" name="field" value="{{teamNum}}">Vote</label>
-        </div></td>      
-      </tr>
-      <tr>
+        </div></td> -->
+        <form action="{{ url_for('poll', teamNumber=teamNum)}}" method='post'>
         <td>
+          <input type="submit" value="Vote">
+        </td>
+        </form>
+        <form action="{{ url_for('commentSubmitted', teamNumber=teamNum)}}" id="form{{teamNum}}" method="post">  
+          <td>
           <label for="comment">Comment:</label>
           <input style="width:700px" name="comment" type='text' placeholder="Send feedback to the teams" form="form{{teamNum}}">
-          <!-- <a href="{{ url_for('commentSubmitted', teamNumber='{{teamNum}}')}}">Send my_value</a> -->
           <input type="submit" value="Submit Comment" form="form{{teamNum}}">
-        </td>
-        <td></td>
-        <td></td>
-        <td>
+          </td>
+        </form>
       </tr>
-    </form>
     {% endfor %}
   </tbody>
 </table>
-<br><input type="submit" value="Vote" />
-</form>

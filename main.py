@@ -176,7 +176,8 @@ def commentSubmitted():
 @app.route('/submitted', methods=['GET', 'POST'])
 def poll():
     # Getting the team number the person voted for
-    votedTeamNum = request.args.get('field')
+    votedTeamNum = request.args.get('teamNumber')
+    print(votedTeamNum)
     # Using boolean to check if vote was recorder
     voteRegistered = False
     try:

@@ -5,11 +5,24 @@
 {% block content %}
 <h1>Results:</h1>
 
-<ul class="list-group">
-{% for teamNum, numVotes in votes %}
-  <li class="list-group-item">Team {{ teamNum }}: {{ data['projects'][teamNum] }} - {{ numVotes }}</li>
-{% endfor %}
-</ul>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Team #</th>
+            <th scope="col">Project</th>
+            <th scope="col">Votes</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for teamNum, numVotes in votes %}
+        <tr>
+            <td>Team {{ teamNum }}</td>
+            <td>{{ data['projects'][teamNum] }}</td>
+            <td>{{ numVotes }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
 <br><br>
 <!-- return to organizer home -->

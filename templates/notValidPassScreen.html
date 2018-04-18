@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block title %}Invalid Password{% endblock %}
+
+{% block content %}
+    <h1>The old password you entered was incorrect. Please try again.</h1><br>
+    <form action="/adminScreen" method="GET">
+            <button type="submit">Back to Admin Home</button>
+        </form>
+
+{% endblock %}

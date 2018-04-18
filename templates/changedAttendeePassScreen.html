@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block title %}Changed Attendee Password{% endblock %}
+
+{% block content %}
+    <h1>You have successfully changed the attendee password!</h1><br>
+    <form action="/adminScreen" method="GET">
+            <button type="submit">Back to Admin Home</button>
+        </form>
+
+{% endblock %}

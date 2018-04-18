@@ -46,13 +46,6 @@ In the command line, enter the following lines to activate the virtual environme
 
 **__change main.py to the file name of the file where the program starts__**
 
-__**Mac/Linux:**__
-
-    $ . venv/bin/activate
-    $ export FLASK_APP=main.py
-    $ flask run --host=0.0.0.0 --port=80
-        * Running on http://0.0.0.0:80/
-        
 __**Windows:**__
 
     $ venv\scripts\activate
@@ -60,7 +53,7 @@ __**Windows:**__
     $ flask run --host=0.0.0.0 --port=80
         * Running on http://0.0.0.0:80/
 
-Now, just head over to [http://jrdesign.cc.gatech.edu/](http://jrdesign.cc.gatech.edu/) to view the running application.
+Now, navigate to [http://jrdesign.cc.gatech.edu/](http://jrdesign.cc.gatech.edu/) to view the running application.
 
 ## Databases
 

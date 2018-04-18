@@ -42,11 +42,9 @@ Now, just head over to [http://127.0.0.1:5000/](http://127.0.0.1:5000/) to view 
 ## Running the Site (Public)
 Connect to the __jrdesign.cc.gatech.edu__ desktop via Windows Remote Connection
 
-In the command line, enter the following lines to activate the virtual environment and run the flask app:
+In the command line in the __jrdesign.cc.gatech.edu__ desktop, enter the following lines to activate the virtual environment and run the flask app:
 
 **__change main.py to the file name of the file where the program starts__**
-
-__**Windows:**__
 
     $ venv\scripts\activate
     $ set FLASK_APP=main.py

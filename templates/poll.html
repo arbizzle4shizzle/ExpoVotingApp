@@ -31,10 +31,10 @@
 <table class="table table-hover table-bordered results">
   <thead>
     <tr>
-      <th class="col-md-5 col-xs-5">Team Number</th>
-      <th class="col-md-4 col-xs-4">Team Name</th>
+      <th class="col-md-3 col-xs-3">Team Number</th>
+      <th class="col-md-3 col-xs-3">Team Name</th>
       <th class="col-md-3 col-xs-3">Project Name</th>
-      <th class="col-md-3 col-xs-3">Description</th>
+      <th class="col-md-6 col-xs-6">Description</th>
       <th class="col-md-3 col-xs-3">Vote</th>
       <th class="col-md-3 col-xs-3">Comment</th>
     </tr>
@@ -58,10 +58,10 @@
           <input type="submit" value="Vote">
         </td>
         </form>
-        <form action="{{ url_for('commentSubmitted', teamNumber=teamNum)}}" id="form{{teamNum}}" method="post">  
+        <form action="{{ url_for('commentSubmitted', teamNumber=teamNum)}}" id="form{{teamNum}}" method="post">
           <td>
           <label for="comment">Comment:</label>
-          <input style="width:700px" name="comment" type='text' placeholder="Send feedback to the teams" form="form{{teamNum}}">
+          <input style="width:500px" name="comment" type='text' placeholder="Send feedback to the teams" form="form{{teamNum}}">
           <input type="submit" value="Submit Comment" form="form{{teamNum}}">
           </td>
         </form>

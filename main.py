@@ -145,13 +145,13 @@ def pollScreen():
     # Create a cursor for the database
     try:
         # Grab the TeamNum and ProjName from all the projects in the database
-    get_cursor().execute("SELECT `Session`, `TableNum`, `TeamNumber`,`ProjName`, `Description` FROM `Project`")
-        for (session, tableNum, teamNum, projName, descript) in get_cursor():
+        get_cursor().execute("SELECT `Session`, `TableNum`, `TeamNumber`,`ProjName`, `Description` FROM `Project`")
+        for (sessionNum, tableNum, teamNum, projName, descript) in get_cursor():
             # Checking if the teamNum and projName are present
             if (teamNum != None and projName != None):
                 # Converting utf-8 teamNum and projName to normal strings
                 # Adding {teamNum : projName} to dictionary
-                poll_data['projects'][str(teamNum)] = [str(session), str(tableNum), str(teamNum), str(projName), str(descript)]
+                poll_data['projects'][str(teamNum)] = [str(sessionNum), str(tableNum), str(teamNum), str(projName), str(descript)]
     except Exception as e:
         pass
         print(e)
@@ -169,8 +169,8 @@ def commentSubmitted():
     teamNumber = request.args.get('teamNumber')
     commentText = request.form["comment"]
     # tStamp = time.time()
-    print(teamNumber,file=sys.stderr)
-    print(commentText,file=sys.stderr)
+    # print(teamNumber,file=sys.stderr)
+    # print(commentText,file=sys.stderr)
     # try:
     get_cursor().execute("INSERT INTO `Comment` (`TeamNum`,`Text`) VALUES (%s,%s)", [teamNumber, commentText]);
     get_db().commit()
@@ -190,7 +190,7 @@ def poll():
         return render_template('alreadyVoted.html')
     # Getting the team number the person voted for
     votedTeamNum = request.args.get('teamNumber')
-    print(votedTeamNum)
+    # print(votedTeamNum)
     # Using boolean to check if vote was recorder
     voteRegistered = False
     try:
@@ -239,7 +239,7 @@ def voting():
     '''
     # Ordering the projects by number of votes
     votes = sorted(votes.items(), key=operator.itemgetter(1), reverse=True)
-    print(votes)
+    # print(votes)
     #display results.html pass in project names and number of votes
     return render_template('results.html', data=poll_data, votes=votes)
 
@@ -312,12 +312,12 @@ def sendComments():
         comments = {}
         projects = {}
         for t in selectedComments:
-            print(t)
+            # print(t)
             get_cursor().execute("SELECT `TeamNum`, `TimeStamp`, `Text` FROM `Comment` WHERE `TimeStamp` = " + "'" + t + "'")
             for (teamNum, timeStamp, text) in get_cursor():
                 # Checking if the teamNum and text are present
                 if (teamNum != None and text != None and timeStamp != None):
-                    print(text)
+                    # print(text)
                     # if the team is already in the dict 
                     if teamNum in comments:
                         # append the comment to the comment list
@@ -328,7 +328,7 @@ def sendComments():
                         comments[teamNum] = [text]
                 get_cursor().execute("SELECT `TeamNumber`,`ProfEmail` FROM `Project` WHERE `TeamNumber` = %s", [teamNum])
                 for (teamNum, profE) in get_cursor():
-                    print(teamNum)
+                    # print(teamNum)
                     projects[teamNum] = profE
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
@@ -343,7 +343,7 @@ def sendComments():
             body = "Hello Team " + team + ", \n\nBelow are comments expo visitors left your project:\n{0}"
             commentMultiLine = ""
             for comment in comments[team]:
-                print(comment)
+                # print(comment)
                 commentMultiLine += "\n- " + comment 
             msg.attach(MIMEText(body.format(str(commentMultiLine)), 'plain'))
             text = msg.as_string()

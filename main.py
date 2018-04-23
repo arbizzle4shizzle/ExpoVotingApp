@@ -274,7 +274,7 @@ def viewComments():
 @app.route('/deleteComments', methods=['GET', 'POST'])
 def deleteComments():
     # Getting the comments that were checked
-    deletedComments = request.args.getlist('delete')
+    deletedComments = request.args.getlist('selected')
 
     deletedComments = map(str, deletedComments)
 
@@ -291,47 +291,51 @@ def sendComments():
     if session['username'] != 'Organizer':
         return render_template('invalidAccess.html')
     try:
+        # Getting the comments that were checked
+        selectedComments = request.args.getlist('selected')
+
+        selectedComments = map(str, selectedComments)
         # Creating a dictionary to store team comment data
         # comments = {teamNum: [[comment1, timestamp1], [comment2, timestamp2], ...]}
         comments = {}
-        # Grab comment data from the database
-        get_cursor().execute("SELECT `TeamNum`, `TimeStamp`,`Text` FROM `Comment`")
-        for (teamNum, timeStamp, text) in get_cursor():
-            # Checking if the teamNum and text are present
-            if (teamNum != None and text != None and timeStamp != None):
-                # if the team is already in the dict 
-                if teamNum in comments:
-                    # append the comment to the comment list
-                    comments[teamNum].append(text)
-                # if the team is not in the dict
-                else:
-                    # add the team to the dict and create the comment list
-                    comments[teamNum] = [text]
         projects = {}
-        get_cursor().execute("SELECT `TeamNumber`,`ProfEmail` FROM `Project`")
-        for (teamNum, profE) in get_cursor():
-            projects[teamNum] = [profE]
+        for t in selectedComments:
+            print(t)
+            get_cursor().execute("SELECT `TeamNum`, `TimeStamp`, `Text` FROM `Comment` WHERE `TimeStamp` = " + "'" + t + "'")
+            for (teamNum, timeStamp, text) in get_cursor():
+                # Checking if the teamNum and text are present
+                if (teamNum != None and text != None and timeStamp != None):
+                    print(text)
+                    # if the team is already in the dict 
+                    if teamNum in comments:
+                        # append the comment to the comment list
+                        comments[teamNum].append(text)
+                    # if the team is not in the dict
+                    else:
+                        # add the team to the dict and create the comment list
+                        comments[teamNum] = [text]
+                get_cursor().execute("SELECT `TeamNumber`,`ProfEmail` FROM `Project` WHERE `TeamNumber` = %s", [teamNum])
+                for (teamNum, profE) in get_cursor():
+                    print(teamNum)
+                    projects[teamNum] = profE
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server.login("expovotingappgt@gmail.com", "juniordesign2")
         fromaddr = "expovotingappgt@gmail.com"
-        toaddr = "arbermuharemi@gmail.com"
         for team in comments.keys():
+            toaddr = projects[team]
+            msg = MIMEMultipart()
+            msg['From'] = fromaddr
+            msg['To'] = toaddr
+            msg['Subject'] = "Team " + team + ": Feedback from the Junior Design Expo!"
+            body = "Hello Team " + team + ", \n\nBelow are comments expo visitors left your project:\n{0}"
+            commentMultiLine = ""
             for comment in comments[team]:
-                # msg = Message("Below is a comment on your project:\n" + comment,
-                #     sender=projects[team][0],
-                #     recipients=[projects[team][1], projects[team][2], projects[team][3], projects[team][4], projects[team][5]])
-                # print(msg)
-                # mail.send(msg)
-                msg = MIMEMultipart()
-                msg['From'] = fromaddr
-                msg['To'] = toaddr
-                msg['Subject'] = "Feedback from the Junior Design Expo!"
-                body = "Below is a comment an expo visitor left your project:\n" + comment
-                msg.attach(MIMEText(body, 'plain'))
-                text = msg.as_string()
-                server.sendmail(fromaddr, toaddr, text)
-                server.sendmail("expovotingappgt@gmail.com", "arbermuharemi@gmail.com", msg);
+                print(comment)
+                commentMultiLine += "\n- " + comment 
+            msg.attach(MIMEText(body.format(str(commentMultiLine)), 'plain'))
+            text = msg.as_string()
+            server.sendmail(fromaddr, toaddr, text)
         server.quit()
     except Exception as e:
         print(e)

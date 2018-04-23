@@ -136,6 +136,9 @@ def incorrectLoginScreen():
 #Displays voting options page
 @app.route('/pollScreen', methods=['GET', 'POST'])
 def pollScreen():
+    #disallow access for non-attendees
+    if session['username'] != 'Attendee':
+        return render_template('invalidAccess.html')
     # Clear the poll_data projects in case any have been removed during this session
     poll_data['projects'].clear()
     # Create a cursor for the database
@@ -177,6 +180,15 @@ def commentSubmitted():
 #Display page after voting is complete
 @app.route('/submitted', methods=['GET', 'POST'])
 def poll():
+    #Checking if user has already submitted a vote
+    userIP = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
+    f = open("ips.txt", "w")
+    f.write(userIP)
+    f.close()
+    #get_cursor().execute("SELECT 'IpAddress' FROM 'IP'")
+    #for ip in get_cursor().fetchall():
+    #    if ip == userIP:
+    #        return render_template('alreadyVoted.html');
     # Getting the team number the person voted for
     votedTeamNum = request.args.get('teamNumber')
     print(votedTeamNum)
@@ -191,8 +203,12 @@ def poll():
         # Adding one vote to the selected project
         get_cursor().execute("UPDATE `Project` SET `NumVotes` = %s WHERE `TeamNumber` = %s", [currNumVotes + 1, votedTeamNum])
         get_db().commit()
-        get_cursor().close()
         voteRegistered = True
+        #Add user's IP address to database.
+        #get_cursor().execute("INSERT INTO 'IP' ('IpAddress') VALUES %s", [userIP])
+        get_cursor().execute("INSERT INTO 'IP' ('IpAddress') VALUES ('127.4.1.1')")
+        get_db().commit()
+        get_cursor().close()
     except:
         pass
     return render_template('thankyou.html', data = votedTeamNum, goodVote = voteRegistered)

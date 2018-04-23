@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block title %}Already Voted{% endblock %}
+
+{% block content %}
+<h1>Sorry, you have already submitted your vote. </h1>
+<form action="/pollScreen" method="GET">
+    <button type="submit">Return to Projects</button>
+</form>
+
+
+{% endblock %}

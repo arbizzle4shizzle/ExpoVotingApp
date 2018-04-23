@@ -183,11 +183,10 @@ def commentSubmitted():
 def poll():
     #Checking if user has already submitted a vote
     userIP = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
-    print(userIP)
-    #get_cursor().execute("SELECT 'IpAddress' FROM 'IP'")
-    #for ip in get_cursor().fetchall():
-    #    if ip == userIP:
-    #        return render_template('alreadyVoted.html');
+    get_cursor().execute("SELECT * FROM `IP` WHERE IpAddress = (%s)", [userIP])
+    status = get_cursor().fetchone()
+    if status != None:
+        return render_template('alreadyVoted.html')
     # Getting the team number the person voted for
     votedTeamNum = request.args.get('teamNumber')
     print(votedTeamNum)

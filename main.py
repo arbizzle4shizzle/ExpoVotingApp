@@ -70,6 +70,7 @@ def close_db(error):
 @app.route('/', methods = ['GET', 'POST'])
 def login():
     #Renders voterLogin.html
+    session['username'] = ''
     return render_template('voterLogin.html')
 
 #Checks password and redirects to necessary url
@@ -117,7 +118,7 @@ def uploadProjectsToDatabase():
         addedProjects = []
         for data in csv_input:
             teamNum = data[0]
-            projName = data[2]
+            projName = data[1]
             try:
                 get_cursor().execute(query, data)
                 get_db().commit()
@@ -144,13 +145,13 @@ def pollScreen():
     # Create a cursor for the database
     try:
         # Grab the TeamNum and ProjName from all the projects in the database
-        get_cursor().execute("SELECT `TeamNumber`,`TeamName`,`ProjName`, `Description` FROM `Project`")
-        for (teamNum, teamName, projName, descript) in get_cursor():
+        get_cursor().execute("SELECT `TeamNumber`,`ProjName`, `Description` FROM `Project`")
+        for (teamNum, projName, descript) in get_cursor():
             # Checking if the teamNum and projName are present
             if (teamNum != None and projName != None):
                 # Converting utf-8 teamNum and projName to normal strings
                 # Adding {teamNum : projName} to dictionary
-                poll_data['projects'][str(teamNum)] = [str(teamNum),str(teamName),str(projName), str(descript)]
+                poll_data['projects'][str(teamNum)] = [str(teamNum),str(projName), str(descript)]
     except:
         pass
     '''
@@ -183,8 +184,6 @@ def poll():
     #Checking if user has already submitted a vote
     userIP = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
     print(userIP)
-    f = open("ips.txt", "w")
-    f.close()
     #get_cursor().execute("SELECT 'IpAddress' FROM 'IP'")
     #for ip in get_cursor().fetchall():
     #    if ip == userIP:
@@ -321,9 +320,9 @@ def sendComments():
                     # add the team to the dict and create the comment list
                     comments[teamNum] = [text]
         projects = {}
-        get_cursor().execute("SELECT `TeamNumber`,`ProfEmail`,`Email1`,`Email2`,`Email3`,`Email4`,`Email5` FROM `Project`")
-        for (teamNum, profE, E1, E2, E3, E4, E5) in get_cursor():
-            projects[teamNum] = [profE, E1, E2, E3, E4, E5]
+        get_cursor().execute("SELECT `TeamNumber`,`ProfEmail` FROM `Project`")
+        for (teamNum, profE) in get_cursor():
+            projects[teamNum] = [profE]
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server.login("expovotingappgt@gmail.com", "juniordesign2")

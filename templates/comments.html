@@ -15,7 +15,7 @@
     {% for teamNum in data %}
     	{% for val in data[teamNum] %}
           <div>
-            <li class="list-group-item"><input type="checkbox" name="delete" value="{{ val[1] }}"> Team {{ teamNum }}: {{ val[0] }}</li>
+            <li class="list-group-item"><input type="checkbox" name="selected" value="{{ val[1] }}"> Team {{ teamNum }}: {{ val[0] }}</li>
           </div>
     	{% endfor %}
     {% endfor %}

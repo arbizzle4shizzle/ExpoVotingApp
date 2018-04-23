@@ -97,6 +97,8 @@ def user_auth():
 #Displays project upload page
 @app.route('/uploadProjects', methods = ['GET', 'POST'])
 def uploadProjects():
+    if session['username'] != 'Organizer':
+        return render_template('invalidAccess.html')
     #renders upload.html
     return render_template('uploadProjects.html')
 
@@ -122,9 +124,10 @@ def uploadProjectsToDatabase():
             try:
                 get_cursor().execute(query, data)
                 get_db().commit()
-                get_cursor().close()
+                # get_cursor().close()
                 addedProjects.append("Team " + teamNum + ": " + projName)
-            except:
+            except Exception as e:
+                print(e)
                 pass
         return render_template("showUploadedProjects.html", data = addedProjects)
 
@@ -174,7 +177,7 @@ def commentSubmitted():
     # try:
     get_cursor().execute("INSERT INTO `Comment` (`TeamNum`,`Text`) VALUES (%s,%s)", [teamNumber, commentText]);
     get_db().commit()
-    get_cursor().close()
+    # get_cursor().close()
     # except:
     #     pass
     return render_template('thankYouComment.html', data = teamNumber)    
@@ -246,6 +249,8 @@ def voting():
 #Displays organizer homepage
 @app.route('/organizerScreen', methods=['GET', 'POST'])
 def organizerScreen():
+    if session['username'] != 'Organizer':
+        return render_template('invalidAccess.html')
     #renders organizerHome.html
     return render_template('organizerHome.html')
 
@@ -358,6 +363,8 @@ def sendComments():
 #Displays admin homepage
 @app.route('/adminScreen', methods=['GET', 'POST'])
 def adminScreen():
+    if session['username'] != 'Admin':
+        return render_template('invalidAccess.html')
     #renders adminHome.html
     return render_template('adminHome.html')
 

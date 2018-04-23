@@ -182,8 +182,8 @@ def commentSubmitted():
 def poll():
     #Checking if user has already submitted a vote
     userIP = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
+    print(userIP)
     f = open("ips.txt", "w")
-    f.write(userIP)
     f.close()
     #get_cursor().execute("SELECT 'IpAddress' FROM 'IP'")
     #for ip in get_cursor().fetchall():
@@ -205,10 +205,8 @@ def poll():
         get_db().commit()
         voteRegistered = True
         #Add user's IP address to database.
-        #get_cursor().execute("INSERT INTO 'IP' ('IpAddress') VALUES %s", [userIP])
-        get_cursor().execute("INSERT INTO 'IP' ('IpAddress') VALUES ('127.4.1.1')")
+        get_cursor().execute("INSERT INTO `IP` (`IpAddress`) VALUES (%s)", [userIP])
         get_db().commit()
-        get_cursor().close()
     except:
         pass
     return render_template('thankyou.html', data = votedTeamNum, goodVote = voteRegistered)

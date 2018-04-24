@@ -61,9 +61,9 @@ If you don't have a venv/ folder in the project directory, run the following com
 ### Installing packages
 Be sure you have the proper packages on the virutal environment to run the app.  These include flask, flask-mysql, and Flask-Mail
 
- 	$pip install flask
- 	$pip install flask-mysql
- 	$pip install Flask-Mail
+ 	$ pip install flask
+ 	$ pip install flask-mysql
+ 	$ pip install Flask-Mail
  	
 ### Testing/Development (Local)
 In the command line, enter the following lines to activate the virtual environment and run the flask app:

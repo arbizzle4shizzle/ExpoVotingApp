@@ -62,9 +62,7 @@ If you don't have a venv/ folder in the project directory, run the following com
 Be sure you have the proper packages on the virutal environment to run the app.  These include flask, flask-mysql, and Flask-Mail
 
  	$pip install flask
-
  	$pip install flask-mysql
-
  	$pip install Flask-Mail
  	
 ### Testing/Development (Local)
@@ -89,7 +87,9 @@ __**Windows:**__
 Now, just head over to [http://127.0.0.1:5000/](http://127.0.0.1:5000/) to view the locally running application.
 
 ### Running the Site (Public)
-Connect to the __jrdesign.cc.gatech.edu__ desktop via Windows Remote Connection
+1. Connect to the school VPN following [this instructions](https://faq.oit.gatech.edu/content/how-do-i-get-started-campus-vpn)
+2. Connect to __jrdesign.cc.gatech.edu__ (the virtual machine) via Windows Remote Connection using your GT username @ gatech.edu (eg: amuharemi3@gatech.edu) and GT password to login.
+3. If the ExpoVotingApp directory doesn't exist, clone this repository to a directory on the virutal machine
 
 In the command line in the __jrdesign.cc.gatech.edu__ desktop, enter the following lines to activate the virtual environment and run the flask app:
 
@@ -102,11 +102,10 @@ In the command line in the __jrdesign.cc.gatech.edu__ desktop, enter the followi
 
 Now, navigate to [http://jrdesign.cc.gatech.edu/](http://jrdesign.cc.gatech.edu/) to view the running application.
 
-### Databases
+## Database
+To view and edit the database, use the following information below
 
-Database Information
-
-Development Database Info:
+### Development Database Info:
 * Website: [http://www.phpmyadmin.co/](http://www.phpmyadmin.co/)
 * Server/Host: sql9.freemysqlhosting.net
 * Name: sql9219692
